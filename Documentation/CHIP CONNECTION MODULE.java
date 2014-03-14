@@ -4,9 +4,13 @@
 /**  chipConnections() returns all the possible connections that an occupied Square has
 * chipConnections() is a helper method of evaluateBoard()
 * @param Square s
-* @return SquareList 
+* @return DList 
 **/
-protected SquareList chipConnections(Square s)
+protected DList chipConnections(Square s)
+//Check the color of the Square, reject if it is empty
+//Check Horizontal
+//Check Vertical
+//Check Diagonal
 
 
 
@@ -16,7 +20,7 @@ protected SquareList chipConnections(Square s)
 *Checks if there are opponents chips in between.
 *
 * @param Square s,
-* @return SquareList l if Square s has horizontal connections, empty SquareList (OR NULL, OR EXCEPTION?) otherwise.
+* @return DList l if Square s has horizontal connections, empty DList (OR NULL, OR EXCEPTION?) otherwise.
 **/
 protected boolean horizontalConnection(Square s);
 
@@ -26,7 +30,7 @@ protected boolean horizontalConnection(Square s);
 *Checks if there are opponents chips in between.
 *
 * @param Square s,
-* @return SquareList l if Square s has vertical connections, empty SquareList (OR NULL, OR EXCEPTION?) otherwise.
+* @return DList l if Square s has vertical connections, empty DList (OR NULL, OR EXCEPTION?) otherwise.
 **/
 protected boolean verticalConnection(Square s);
 
@@ -36,14 +40,14 @@ protected boolean verticalConnection(Square s);
 *Checks if there are opponents chips in between.
 *
 * @param Square s,
-* @return SquareList l if Square s has diagonal connections, empty SquareList (OR NULL, OR EXCEPTION?) otherwise.
+* @return DList l if Square s has diagonal connections, empty DList (OR NULL, OR EXCEPTION?) otherwise.
 **/
 protected boolean diagonalConnection(Square s);
 
 /**
 * Checks if there are opponents chips in between a connection
 *
-* @param SquareList l formed by two chips
+* @param DList l formed by two chips
 * @return true if the there are no blocks, false otherwise
 **/
-protected boolean clearPath(SquareList l);
+protected boolean clearPath(DList l);

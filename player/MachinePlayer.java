@@ -8,9 +8,16 @@ package player;
  */
 public class MachinePlayer extends Player {
 
+  private final MACHINEPLAYERCOLOR;
+  private  GameBoard gb;
+
   // Creates a machine player with the given color.  Color is either 0 (black)
   // or 1 (white).  (White has the first move.)
   public MachinePlayer(int color) {
+
+    this.MACHINEPLAYERCOLOR = color;
+    Move
+
   }
 
   // Creates a machine player with the given color and search depth.  Color is

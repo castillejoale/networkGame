@@ -6,7 +6,7 @@
 * @param none
 * @return a two dimensional array of Squares
 **/
-protected Gameboard()
+protected GameBoard()
 
 
 

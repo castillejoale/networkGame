@@ -1,13 +1,13 @@
 // Validity Module
 
 /**
-* isValidMove(Square s) dermines whether a Square whose color field is -1 (unoccupied) is a valid Move.
-* This method uses four helper methods: hasChipsLeft(), isInBound(Square s), isOccupied(Square s), and formsCluster(Square s).
+* isValidMove(Move m) dermines whether a s a valid Move.
+* This method uses four helper methods: hasChipsLeft(), isInBound(Move m), isOccupied(Move m), and formsCluster(Move m).
 * This method is in the Gameboard class.
-* @param Square s
+* @param Move m
 * @return boolean - true if the Square could hold a valid Move, or false otherwise
 **/
-protected boolean isValidMove(Square s)
+protected boolean isValidMove(Move m)
 
 /**
 * hasChipsLeft() is a helper function of isValidMove()
@@ -17,35 +17,38 @@ protected boolean isValidMove(Square s)
 protected boolean hasChipsLeft()
 
 /**
-* isInBound(Square s) is a helper function of isValidMove()
+* isInBound(Move m) is a helper function of isValidMove()
 * This method is in the Gameboard class.
-* @param Square s
+* @param Move m
 * @return boolean - true if that Square is within the boundaries of the Gameboard: within the 8x8 range, not on a corner,
 *                   and not on an opponent's goal area.
 **/
-protected boolean isInBound(Square s)
+protected boolean isInBound(Move m)
 
 /**
-* isOccupied(Square s) is a helper function of isValidMove()
+* isOccupied(Move m) is a helper function of isValidMove()
 * This method is in the Gameboard class.
-* @param Square s
+* @param Move m
 * @return boolean - true if the color field does not equal -1 (it is unoccupied), false otherwise
 **/
-protected boolean isOccupied(Square s)
+protected boolean isOccupied(Move m)
 
 /**
-* formsCluster(Square s) is a helper function of isValidMove()
+* formsCluster(Move m) is a helper function of isValidMove()
 * Refer to the readme for project 2 to understand what a cluster is.
 * This method is in the Gameboard class.
-* @param Square s
+* @param Move m
 * @return boolean - true if a cluster is formed (would result in isValidMove returning false), false otherwise
 **/
-protected boolean formsCluster(Square s)
+protected boolean formsCluster(Move m)
 
 /**
-* allValidMoves() returns a SquareList of all Squares s such that isValidMove(Square s) returns true.
+* allValidMoves() returns a DList of all Squares s such that isValidMove(Move m) returns true.
 * This method is in the Gameboard class.
 * @param none -- uses information from "this" Gameboard
-* @return a SquareList of all Squares s such that isValidMove(Square s) returns true.
+* @return a DList of all Squares s such that isValidMove(Move m) returns true.
 **/
-protected SquareList allValidMoves(Square s)
+protected DList allValidMoves(int sideColor)
+
+
+

@@ -15,12 +15,14 @@ public Move chooseMove()
 * This method is in the MachinePlayer class.
 * This method calls evaluateBoard, in our board evaluation module.
 * @param Gameboard board: the instance of our Gameboard
-* @param SquareList validmoves: the SquareList returned from allValidMoves()
+* @param DList validmoves: the DList returned from allValidMoves()
 * @param Int depth: depth of level search
 * @param Boolean side: true is MachinePlayer turn and false is Opponent's player
 * @return Move: the best estimated Move
 **/
 
-protected Move alphaBetaPruning(Boolean side, Int alpha, Int beta)
+protected Move alphaBetaPruning(boolean side, int alpha, int beta)
+
+//Pradyumn said to create a new board first and then work in undoing moves.
 
 
