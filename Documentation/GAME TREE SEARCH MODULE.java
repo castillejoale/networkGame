@@ -14,8 +14,13 @@ public Move chooseMove()
 * alphaBetaPruning() is a helper method of chooseMove() that does a game tree search with alpha-beta pruning.
 * This method is in the MachinePlayer class.
 * This method calls evaluateBoard, in our board evaluation module.
-* @param the instance of our Gameboard, the SquareList returned from allValidMoves()
-* @return the best estimated Move
+* @param Gameboard board: the instance of our Gameboard
+* @param SquareList validmoves: the SquareList returned from allValidMoves()
+* @param Int depth: depth of level search
+* @param Boolean side: true is MachinePlayer turn and false is Opponent's player
+* @return Move: the best estimated Move
 **/
-protected Move alphaBetaPruning(Gameboard board, SquareList validmoves)
+
+protected Move alphaBetaPruning(Boolean side, Int alpha, Int beta)
+
 

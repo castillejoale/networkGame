@@ -1,13 +1,12 @@
 // interface for Square class
 
 /** 
-* The Square class constructor creates a Square that is referenced by the Gameboard and holds the (i,j) location of the Square within
-* Gameboard, and the occupancy of that square.
+* The Square class constructor creates a Square that is referenced by the Gameboard and hold the color of the chip.
 * -1 = unoccupied
 * 0 = black
 * 1 = white
 **/
-protected Square(int i, int j, int color)
+protected Square(int color)
 
 /**
 * getColor() is a getter method that returns the color of the Square
@@ -24,5 +23,5 @@ protected int getColor()
 * @param Square s, int color
 * @return Square s with updated color field
 **/
-protected Square setColor(Square s, int color)
+protected void setColor(Square s, int color)
 

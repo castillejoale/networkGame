@@ -21,6 +21,7 @@ public class MachinePlayer extends Player {
   // Returns a new move by "this" player.  Internally records the move (updates
   // the internal game board) as a move by "this" player.
   public Move chooseMove() {
+    //Contrain if we already have 10 chips in order to choose add moves or step moves
     return new Move();
   } 
 

@@ -12,6 +12,8 @@
    *    If GameBoard squares contain illegal values, the behavior of this
    *          method is undefined (i.e., don't expect any reasonable behavior).
    *
+   *  In Gameborad class
+   *
    *  @param side is MachinePlayer.COMPUTER or MachinePlayer.OPPONENT
    *  @return true if player "side" has a winning network in "this" GameBoard;
    *          false otherwise.
