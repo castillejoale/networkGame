@@ -9,7 +9,7 @@ package list;
  *  DO NOT CHANGE ANY METHOD PROTOTYPES IN THIS FILE.
  **/
 
-public class DList extends List {
+public class DList<T> extends List {
 
   /**
    *  (inherited)  size is the number of items in the list.
@@ -20,7 +20,7 @@ public class DList extends List {
    *  DO NOT CHANGE THE FOLLOWING FIELD DECLARATION.
    **/
 
-  protected DListNode head;
+  protected DListNode<T> head;
 
   /* DList invariants:
    *  1)  head != null.
@@ -48,15 +48,15 @@ public class DList extends List {
    *  @param prev the node previous to this node.
    *  @param next the node following this node.
    **/
-  protected DListNode newNode(Object item, DList list,
-                              DListNode prev, DListNode next) {
-    return new DListNode(item, list, prev, next);
+  protected DListNode<T> newNode(T item, DList<T> list,
+                              DListNode<T> prev, DListNode<T> next) {
+    return new DListNode<T>(item, list, prev, next);
   }
 
   /**
    *  DList() constructs for an empty DList.
    **/
-  public DList() {
+  public DList<T>() {
     // Your solution here.  Similar to Homework 4, but now you need to specify
     //   the `list' field (second parameter) as well.
 
@@ -78,13 +78,13 @@ public class DList extends List {
    *
    *  Performance:  runs in O(1) time.
    **/
-  public void insertFront(Object item) {
+  public void insertFront(T item) {
     // Your solution here.  Similar to Homework 4, but now you need to specify
     //   the `list' field (second parameter) as well.
 
     //MIO
 
-    DListNode node = newNode(item, this, head, head.next);
+    DListNode<T> node = newNode(item, this, head, head.next);
     head.next.prev = node;
     head.next = node;
     node.myList = this;
@@ -100,13 +100,13 @@ public class DList extends List {
    *
    *  Performance:  runs in O(1) time.
    **/
-  public void insertBack(Object item) {
+  public void insertBack(T item) {
     // Your solution here.  Similar to Homework 4, but now you need to specify
     //   the `list' field (second parameter) as well.
 
     //MIO
 
-    DListNode node = newNode(item, this, head.prev, head);
+    DListNode<T> node = newNode(item, this, head.prev, head);
     head.prev.next = node;
     head.prev = node;
     node.myList = this;
@@ -144,6 +144,7 @@ public class DList extends List {
   public ListNode back() {
     return head.prev;
   }
+} // class closing brace
 
   /**
    *  toString() returns a String representation of this DList.
@@ -156,7 +157,7 @@ public class DList extends List {
    */
   public String toString() {
     String result = "[  ";
-    DListNode current = head.next;
+    DListNode<T> current = head.next;
     while (current != head) {
       result = result + current.item + "  ";
       current = current.next;
@@ -320,4 +321,4 @@ System.out.println("NO YO");
 
 
   }
-}
+  **/

@@ -1,4 +1,4 @@
-/* DListNode.java */
+/* DListNode<T>.java */
 
 package list;
 
@@ -6,7 +6,7 @@ package list;
  *  A DListNode is a mutable node in a DList (doubly-linked list).
  **/
 
-public class DListNode extends ListNode {
+public class DListNode<T> extends ListNode {
 
   /**
    *  (inherited)  item references the item stored in the current node.
@@ -17,8 +17,9 @@ public class DListNode extends ListNode {
    *  DO NOT CHANGE THE FOLLOWING FIELD DECLARATIONS.
    **/
 
-  protected DListNode prev;
-  protected DListNode next;
+  protected DListNode<T> prev;
+  protected DListNode<T> next;
+  protected T item; // making item to be of type T, which will be Move
 
   /**
    *  DListNode() constructor.
@@ -27,7 +28,7 @@ public class DListNode extends ListNode {
    *  @param p the node previous to this node.
    *  @param n the node following this node.
    */
-  DListNode(Object i, DList l, DListNode p, DListNode n) {
+  DListNode(T i, DList<T> l, DListNode<T> p, DListNode<T> n) {
     item = i;
     myList = l;
     prev = p;
@@ -89,7 +90,7 @@ public class DListNode extends ListNode {
    *
    *  Performance:  runs in O(1) time.
    */
-  public void insertAfter(Object item) throws InvalidNodeException {
+  public void insertAfter(T item) throws InvalidNodeException {
     if (!isValidNode()) {
       throw new InvalidNodeException("insertAfter() called on invalid node");
     }
@@ -101,7 +102,7 @@ public class DListNode extends ListNode {
 
     //MIO
 
-    DListNode newNode = new DListNode(item, (DList) this.myList, this, this.next);
+    DListNode<T> newNode = new DListNode<T>(item, (DList<T>) this.myList, this, this.next);
     this.next.prev = newNode;
     this.next = newNode;
     this.myList = myList;
@@ -119,7 +120,7 @@ public class DListNode extends ListNode {
    *
    *  Performance:  runs in O(1) time.
    */
-  public void insertBefore(Object item) throws InvalidNodeException {
+  public void insertBefore(T item) throws InvalidNodeException {
     if (!isValidNode()) {
       throw new InvalidNodeException("insertBefore() called on invalid node");
     }
@@ -131,7 +132,7 @@ public class DListNode extends ListNode {
 
     //MIO
 
-    DListNode newNode = new DListNode(item, (DList) this.myList, this.prev, this);
+    DListNode<T> newNode = new DListNode<T>(item, (DList) this.myList, this.prev, this);
     this.prev.next = newNode;
     this.prev = newNode;
     this.myList = myList;
