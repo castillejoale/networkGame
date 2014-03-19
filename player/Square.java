@@ -9,9 +9,10 @@
 
 package player;
 
-protected class Square {
+public class Square {
 
-	private int color; 
+	private int color;
+	private int[] location; 
 
 /** 
 * The Square class constructor creates a Square that is referenced by the Gameboard and holds the (i,j) location of the Square within
@@ -23,12 +24,16 @@ protected class Square {
 * 0 = black
 * 1 = white
 **/
-protected Square(int color) {
+protected Square(int color, int i, int j) {
 	if (color < -1 || color > 1) {
 		return;
 	} else {
 		this.color = color;
 	}
+	
+	location = new int[2];
+	location[0] = i;
+	location[1] = j;
 }
 
 /**
@@ -49,13 +54,17 @@ protected int getColor() {
 * @param int color
 * @return Square s with updated color field
 **/
-protected Square setColor(int color) {
+protected void setColor(int color) {
 	if (color < -1 || color > 1) {
 		return;
 	} else {
 		this.color = color;
 	}
 
+}
+
+protected int[] location() {
+	return location;
 }
 
 }

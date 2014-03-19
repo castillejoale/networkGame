@@ -1,6 +1,6 @@
 /* DListNode<T>.java */
 
-package list;
+package player;
 
 /**
  *  A DListNode is a mutable node in a DList (doubly-linked list).

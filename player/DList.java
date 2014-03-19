@@ -1,6 +1,6 @@
 /* DList.java */
 
-package list;
+package player;
 
 /**
  *  A DList is a mutable doubly-linked list ADT.  Its implementation is
@@ -56,13 +56,13 @@ public class DList<T> extends List {
   /**
    *  DList() constructs for an empty DList.
    **/
-  public DList<T>() {
+  public DList() {
     // Your solution here.  Similar to Homework 4, but now you need to specify
     //   the `list' field (second parameter) as well.
 
     //MIO
 
-    head = newNode(Integer.MIN_VALUE, null, null, null);
+    head = newNode(null, null, null, null);
     
     //head.myList = this;
     head.next = head;
@@ -145,7 +145,7 @@ public class DList<T> extends List {
     return head.prev;
   }
 } // class closing brace
-
+/*
   /**
    *  toString() returns a String representation of this DList.
    *
@@ -155,6 +155,7 @@ public class DList<T> extends List {
    *
    *  Performance:  runs in O(n) time, where n is the length of the list.
    */
+  /*
   public String toString() {
     String result = "[  ";
     DListNode<T> current = head.next;
@@ -165,6 +166,7 @@ public class DList<T> extends List {
     return result + "]";
   }
 
+/*
   private static void testInvalidNode(ListNode p) {
     System.out.println("p.isValidNode() should be false: " + p.isValidNode());
     try {
@@ -267,7 +269,7 @@ System.out.println("NO YO");
 
 
 
-    
+  /*  
     l.insertFront(new Integer(3));
     l.insertFront(new Integer(2));
     l.insertFront(new Integer(1));
@@ -321,4 +323,4 @@ System.out.println("NO YO");
 
 
   }
-  **/
+  */

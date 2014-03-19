@@ -29,7 +29,7 @@ public class MachinePlayer extends Player {
 
     searchDepth = 2;
 
-    board = new GameBoard();
+    board = new GameBoard(this);
   }
 
   // Creates a machine player with the given color and search depth.  Color is
@@ -48,7 +48,7 @@ public class MachinePlayer extends Player {
 
     this.searchDepth = searchDepth;
 
-    board = new GameBoard();
+    board = new GameBoard(this);
 
   }
 
