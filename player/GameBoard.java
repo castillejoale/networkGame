@@ -316,6 +316,69 @@ protected DList chipConnections(int i, int j) {
 }
 
 
+
+//FUTURE chipConnections METHOD
+
+/*
+protected DList chipConnections(Square s){
+	//Check the color of the Square, reject if it is empty
+
+
+	//Check 8 methods
+
+}
+*/
+
+
+
+
+
+//8 FUTURE HELPER METHODS FOR chipConnections
+
+/*
+
+private DListNode leftHorizontalConnection(Square s){
+
+}
+
+private DListNode leftTopDiagonalConnection(Square s){
+
+}
+
+private DListNode topVerticalConnection(Square s){
+
+}
+
+private DListNode rightTopDiagonalConnection(Square s){
+
+}
+
+private DListNode rightHorizontalConnection(Square s){
+
+}
+
+private DListNode rightBottomDiagonalConnection(Square s){
+
+}
+
+private DListNode bottomVerticalConnection(Square s){
+
+}
+
+private DListNode leftBottomDiagonalConnection(Square s){
+
+}
+
+*/
+
+
+
+
+
+
+
+
+
 /**
 * evaluateBoard() is a helper method of alphaBetaPruning() that assigns scores to each board in the game tree search,
 * following our evaluation algorithm.
@@ -347,7 +410,80 @@ protected double evaluateBoard(GameBoard board, int depth) {
 **/
   protected boolean hasValidNetwork(int sidecolor) {
   	// Alejandro's code goes here
+
+// PSEUDOCODE MADE BY SHIR AND ALEJANDRO
+
+/*
+
+public DList<Square> ChipConnection(Square s){
+} 
+
+public Boolean hasNetwork(int sidecolor){
+//Parameter tells us if we are checking for a white connection or black connection 
+
+//initialize a Dlist of Squares for the begining line
+DList beginingList = new DList;
+result = false; 
+this.depthCounter = 0; //Make a depthCounter field protected (non-static) 
+
+if(sidecolor = white){ 
+for(j = 1; j< 7; j++){
+if board[0][j].color() = sidecolor{
+beginingList.insert(board[0][j]); 
+}else{
+continue;
+} 
+} 
+if else(sidecolor =black){ 
+for(i = 1; i< 7; j++){
+if board[i][0].color() = sidecolor{
+beginingList.insert(board[i][0]); 
+}else{
+continue;
+} 
+} 
+
+if beginingList.size() ==0{
+return false; //we have no chips in the begining row 
+
+for(square in beginingList SQ){ 
+this.depthCounter = 1;
+SQ.setVisited =true;
+if(explore(SQ,) == true){
+result = true
+return result;   
+}else{
+SQ.setVisited = false;
+continue;
+}
+} 
+
+return result //if we reach this code it means we went through the whole for loop of begining list and found no network so it will return false 
+
+private Boolean explore(Square s){
+this.depthCounter++;
+s.setVisited =true;
+If base case{
+return true
+}	
+else not base case{
+DLIst<Square> continueList = new chipConnection(s) 
+for( SQUARE each square in continueList){
+if explore(SQUARE) == true
+return true; 
+}else if explore(SQUARE) == false	
+depthCounter--
+SQUARE.setVisited = false; 
+continue; 
+
+
+*/
+
   	return false;
+
+
+
+
   }
 
 
