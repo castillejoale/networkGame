@@ -8,6 +8,7 @@
 **/
 
 package player;
+import list.*;
 
 public class Square {
 

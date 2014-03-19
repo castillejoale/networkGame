@@ -7,6 +7,8 @@
 
 package player;
 
+import list.*;
+
 public class GameBoard {
 
 	protected Square[][] board;
@@ -48,8 +50,10 @@ protected boolean isValidMove(Move m, int sidecolor) {
   		return true;
   	}
   }
-  return false;
   System.out.println("Move is invalid!");
+  return false;
+
+  
 }
 
 /**
@@ -74,6 +78,8 @@ protected boolean hasChipsLeft() {
   if (chips < 10) {
     return true;
   } 
+
+  	return false;
 }
 
 /**
@@ -87,23 +93,23 @@ protected boolean hasChipsLeft() {
 protected boolean isInBound(Move m) {
 
   if (m.x1 < 0 || m.x1 > 7 || m.y1 < 0 || m.y1 > 7) {
+  	System.out.println("The move is not within the 8x8 board!");
     return false; // not on the 8x8 board
-    System.out.println("The move is not within the 8x8 board!");
   }
   if ((m.x1 == 0 && m.y1 == 0) || (m.x1 == 7 && m.y1 == 0) || (m.x1 == 0 && m.y1 == 7) || (m.x1 == 7 && m.y1 == 7)) {
-    return false; // no corners
     System.out.println("A chip cannot be placed on the corners of the board!");
+    return false; // no corners
   } 
   if (machinePlayer.machinePlayerColor == 0) {
     if (m.x1 == 0 || m.x1 == 7) {
-      return false; // black cannot be in white's goal
       System.out.println("You cannot place a chip in your opponent's goal!");
+      return false; // black cannot be in white's goal
     }  
   }
   if (machinePlayer.machinePlayerColor == 1) {
     if (m.y1 == 0 || m.y1 == 7) {
-      return false; // white cannot be in black's goal
       System.out.println("You cannot place a chip in your opponent's goal!");
+      return false; // white cannot be in black's goal
     }
   }
   return true; // if all if statements are false, the Move is in bounds
@@ -119,9 +125,11 @@ protected boolean isInBound(Move m) {
 protected boolean isOccupied(Move m) {
 
   if (board[m.x1][m.y1].getColor() == -1) {
-    return false;
     System.out.println("Square is occupied!");
+    return false;
   }
+
+  return true;
 
 }
 
@@ -184,12 +192,14 @@ protected boolean formsCluster(Move m, int sidecolor) {
 		}
 		if (surroundingchips < 3) {
 			return false; // doesn't form cluster --> valid Move
-		} else {
-			return true;
-			System.out.println("This move would form a cluster!");
 		}
 
+		System.out.println("This move would form a cluster!");
+		return true;
+
 	}
+
+
 	if (m.moveKind == Move.STEP) {
 
 		board[m.x2][m.y2].setColor(-1); // take away old move, then repeat ADD step algorithm
@@ -240,15 +250,19 @@ protected boolean formsCluster(Move m, int sidecolor) {
 			}
 
 		}
+
 		if (surroundingchips < 3) {
 			return false; // doesn't form cluster --> valid Move
-		} else {
-			return true;
-			System.out.println("This move would form a cluster!");
 		}
 
+		System.out.println("This move would form a cluster!");
+		return true;
 
-	}	
+
+	}
+
+	System.out.println("NOT AN ADEQUATE MOVE!!");
+	return true;	
 
 }
 
@@ -276,9 +290,9 @@ protected void updateGameBoard(Move m, int sidecolor) {
 * @param sidecolor -- MUST BE ONE OF THE FOLLOWING TWO CHOICES: either machinePlayer.machinePlayerColor or machinePlayer.opponentColor 
 * @return a DList of all Moves m such that isValidMove(Move m) returns true.
 **/
-protected DList<T> allValidMoves(int sidecolor) {
+protected DList allValidMoves(int sidecolor) {
 
-	DList<Move> validMovesList = new DList<Move>();
+	DList validMovesList = new DList();
 
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
@@ -287,6 +301,8 @@ protected DList<T> allValidMoves(int sidecolor) {
 			}
 		}
 	}
+
+	return validMovesList;
 }
 
 /** chipConnections() is a helper method of evaluateBoard() that creates a DList of connections for a given occupied (single) Square
@@ -294,9 +310,9 @@ protected DList<T> allValidMoves(int sidecolor) {
 * @param int i, int j, the (i,j) values from the GameBoard that point to a specific chip
 * @return DList 
 **/
-protected DList<T> chipConnections(int i, int j) {
+protected DList chipConnections(int i, int j) {
 	// Alejandro's code goes here
-	return new DList<Move>();
+	return new DList();
 }
 
 
