@@ -11,7 +11,7 @@ import list.*;
 
 public class GameBoard {
 
-	protected Square[][] board;
+	public Square[][] board; //CHANGE THIS TO PROTECTED, IT IS JUST FOR TESTING
 	protected MachinePlayer machinePlayer;
 
 /**
@@ -125,9 +125,10 @@ protected boolean isInBound(Move m) {
 protected boolean isOccupied(Move m) {
 
   if (board[m.x1][m.y1].getColor() == -1) {
-    System.out.println("Square is occupied!");
     return false;
   }
+
+  System.out.println("Square is occupied!");
 
   return true;
 
@@ -266,110 +267,372 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 }
 
-/**
-* updateGameBoard(Move m) updates the GameBoard with a new Move, as long as this Move is valid.
-* @param Move m, int sidecolor, WHICH CAN ONLY SAY ONE OF TWO THINGS: either machinePlayer.machinePlayerColor or machinePlayer.opponentColor
-* @return nothing -- the GameBoard is updated
-**/
-protected void updateGameBoard(Move m, int sidecolor) {
+	/**
+	* updateGameBoard(Move m) updates the GameBoard with a new Move, as long as this Move is valid.
+	* @param Move m, int sidecolor, WHICH CAN ONLY SAY ONE OF TWO THINGS: either machinePlayer.machinePlayerColor or machinePlayer.opponentColor
+	* @return nothing -- the GameBoard is updated
+	**/
+	protected void updateGameBoard(Move m, int sidecolor) {
 
-	if (isValidMove(m, sidecolor)) {
-		if (m.moveKind == Move.ADD) {
-			board[m.x1][m.y1].setColor(sidecolor);
-		}
-		if (m.moveKind == Move.STEP) {
-			board[m.x2][m.y2].setColor(-1);
-			board[m.x1][m.y1].setColor(sidecolor);
-		}
-	}
-}
-
-/**
-* allValidMoves() returns a SquareList of all Squares s such that isValidMove(Move m) returns true.
-* This method is in the Gameboard class.
-* @param sidecolor -- MUST BE ONE OF THE FOLLOWING TWO CHOICES: either machinePlayer.machinePlayerColor or machinePlayer.opponentColor 
-* @return a DList of all Moves m such that isValidMove(Move m) returns true.
-**/
-protected DList allValidMoves(int sidecolor) {
-
-	DList validMovesList = new DList();
-
-	for (int i = 0; i < 8; i++) {
-		for (int j = 0; j < 8; j++) {
-			if (isValidMove(new Move(i,j),sidecolor)) {
-				validMovesList.insertBack(new Move(i,j));
+		if (isValidMove(m, sidecolor)) {
+			if (m.moveKind == Move.ADD) {
+				board[m.x1][m.y1].setColor(sidecolor);
+			}
+			if (m.moveKind == Move.STEP) {
+				board[m.x2][m.y2].setColor(-1);
+				board[m.x1][m.y1].setColor(sidecolor);
 			}
 		}
 	}
 
-	return validMovesList;
-}
+	/**
+	* allValidMoves() returns a SquareList of all Squares s such that isValidMove(Move m) returns true.
+	* This method is in the Gameboard class.
+	* @param sidecolor -- MUST BE ONE OF THE FOLLOWING TWO CHOICES: either machinePlayer.machinePlayerColor or machinePlayer.opponentColor 
+	* @return a DList of all Moves m such that isValidMove(Move m) returns true.
+	**/
+	protected DList allValidMoves(int sidecolor) {
 
-/** chipConnections() is a helper method of evaluateBoard() that creates a DList of connections for a given occupied (single) Square
-* with other occupied Squares.
-* @param int i, int j, the (i,j) values from the GameBoard that point to a specific chip
-* @return DList 
-**/
-protected DList chipConnections(int i, int j) {
-	// Alejandro's code goes here
-	return new DList();
-}
+		DList validMovesList = new DList();
+
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if (isValidMove(new Move(i,j),sidecolor)) {
+					validMovesList.insertBack(new Move(i,j));
+				}
+			}
+		}
+
+		return validMovesList;
+	}
+
+	/** chipConnections() is a helper method of evaluateBoard() that creates a DList of connections for a given occupied (single) Square
+	* with other occupied Squares.
+	* @param Square s, look for connections of given Square
+	* @return DList of Squares
+	**/
+	protected DList chipConnections(Square s) {
+
+		int i = s.location()[0];
+		int j = s.location()[1];
+		int color = s.getColor();
+		DList list = new DList();
+
+
+		// Make sure Square is black or white
+		if (color == -1){ 
+			System.out.println("Checking chipsConnections in a not black nor white Square!");
+			return null;
+		}
+
+
+		//We call the 8 helper methods that will check the 8 different possible connections
+		leftHorizontalConnection(i, j, color, list);
+		rightHorizontalConnection(i, j, color, list);
+		bottomVerticalConnection(i, j, color, list);
+		topVerticalConnection(i, j, color, list);
+		leftTopDiagonalConnection(i, j, color, list);
+		rightTopDiagonalConnection(i, j, color, list);
+		rightBottomDiagonalConnection(i, j, color, list);
+		leftBottomDiagonalConnection(i, j, color, list);
+
+		return list;
+
+	}
+
+
+	//Method to test is chipConnections works
+	//Returns number of connections that a chip has.
+	protected int numberChipConnections(Square s) {
+
+		DList list = chipConnections(s);
+
+		if (list.length() == 0) {
+			return 0;
+		} else {
+			return list.length();
+		}
+
+	}
+
+
+	private void leftHorizontalConnection(int i, int j, int color, DList list){
+
+		int x = i;
+
+		while(true) {
+
+			if (x < 1 ){
+				break;
+			}
+
+
+			Square nextSquare = board[x-1][j];
+
+			int nextSquareColor = nextSquare.getColor();
+
+			if (nextSquareColor == -1){
+
+				x--;
+
+			} else if (color == nextSquareColor){
+
+				list.insertBack(nextSquare);
+				return;
+
+			} else {
+
+				return;
+
+			}
+
+
+		}
 
 
 
-//FUTURE chipConnections METHOD
+	}
 
-/*
-protected DList chipConnections(Square s){
-	//Check the color of the Square, reject if it is empty
+	private void leftTopDiagonalConnection(int i, int j, int color, DList list){
+
+		int x = i;
+		int y = j;
+
+		while(true) {
+
+			if (x < 1 || y < 1 ){
+				break;
+			}
+
+			Square nextSquare = board[x-1][y-1];
+
+			int nextSquareColor = nextSquare.getColor();
+
+			if (nextSquareColor == -1){
+
+				x--;
+				y--;
+
+			} else if (color == nextSquareColor){
+
+				list.insertBack(nextSquare);
+				return;
+
+			} else {
+
+				return;
+
+			}
 
 
-	//Check 8 methods
+		}
 
-}
-*/
+	}
+
+	private void topVerticalConnection(int i, int j, int color, DList list){
+		int y = j;
+
+		while(true) {
+
+			if (y < 1){
+				break;
+			}
 
 
+			Square nextSquare = board[i][y];
+
+			int nextSquareColor = nextSquare.getColor();
+
+			if (nextSquareColor == -1){
+
+				y--;
+
+			} else if (color == nextSquareColor){
+
+				list.insertBack(nextSquare);
+				return;
+
+			} else {
+
+				return;
+
+			}
+
+		}
+
+	}
+
+	private void rightTopDiagonalConnection(int i, int j, int color, DList list){
+
+		int x = i;
+		int y = j;
+
+		while(true) {
+
+			if (x > 7 || y < 1 ){
+				break;
+			}
+
+			Square nextSquare = board[x+1][y-1];
+
+			int nextSquareColor = nextSquare.getColor();
+
+			if (nextSquareColor == -1){
+
+				x++;
+				y--;
+
+			} else if (color == nextSquareColor){
+
+				list.insertBack(nextSquare);
+				return;
+
+			} else {
+
+				return;
+
+			}
+
+		}
+
+	}
+
+	private void rightHorizontalConnection(int i, int j, int color, DList list){
+
+		int x = i;
+
+		while(true) {
+
+			if (x > 7 ){
+				break;
+			}
+
+			Square nextSquare = board[x+1][j];
+
+			int nextSquareColor = nextSquare.getColor();
+
+			if (nextSquareColor == -1){
+
+				x++;
+
+			} else if (color == nextSquareColor){
+
+				list.insertBack(nextSquare);
+				return;
+
+			} else {
+
+				return;
+
+			}
+
+		}
+
+	}
+
+	private void rightBottomDiagonalConnection(int i, int j, int color, DList list){
+
+		int x = i;
+		int y = j;
+
+		while(true) {
+
+			if (x > 7 || y > 7 ){
+				break;
+			}
+
+			Square nextSquare = board[x+1][y+1];
+
+			int nextSquareColor = nextSquare.getColor();
+
+			if (nextSquareColor == -1){
+
+				x++;
+				y++;
+
+			} else if (color == nextSquareColor){
+
+				list.insertBack(nextSquare);
+				return;
+
+			} else {
+
+				return;
+
+			}
+
+		}
 
 
+	}
 
-//8 FUTURE HELPER METHODS FOR chipConnections
+	private void bottomVerticalConnection(int i, int j, int color, DList list){
 
-/*
+		int y = j;
 
-private DListNode leftHorizontalConnection(Square s){
+		while(true) {
 
-}
+			if (y > 7 ){
+				break;
+			}
 
-private DListNode leftTopDiagonalConnection(Square s){
+			Square nextSquare = board[i][y];
 
-}
+			int nextSquareColor = nextSquare.getColor();
 
-private DListNode topVerticalConnection(Square s){
+			if (nextSquareColor == -1){
 
-}
+				y++;
 
-private DListNode rightTopDiagonalConnection(Square s){
+			} else if (color == nextSquareColor){
 
-}
+				list.insertBack(nextSquare);
+				return;
 
-private DListNode rightHorizontalConnection(Square s){
+			} else {
 
-}
+				return;
 
-private DListNode rightBottomDiagonalConnection(Square s){
+			}
 
-}
+		}
 
-private DListNode bottomVerticalConnection(Square s){
+	}
 
-}
+	private void leftBottomDiagonalConnection(int i, int j, int color, DList list){
 
-private DListNode leftBottomDiagonalConnection(Square s){
+		int x = i;
+		int y = j;
 
-}
+		while(true) {
 
-*/
+			if (x < 1 || y > 7 ){
+				break;
+			}
+
+			Square nextSquare = board[x-1][y+1];
+
+			int nextSquareColor = nextSquare.getColor();
+
+			if (nextSquareColor == -1){
+
+				x--;
+				y++;
+
+			} else if (color == nextSquareColor){
+
+				list.insertBack(nextSquare);
+				return;
+
+			} else {
+
+				return;
+
+			}
+
+		}
+
+	}
 
 
 
@@ -411,73 +674,73 @@ protected double evaluateBoard(GameBoard board, int depth) {
   protected boolean hasValidNetwork(int sidecolor) {
   	// Alejandro's code goes here
 
-// PSEUDOCODE MADE BY SHIR AND ALEJANDRO
+	// PSEUDOCODE MADE BY SHIR AND ALEJANDRO
 
-/*
+	/*
 
-public DList<Square> ChipConnection(Square s){
-} 
+	public DList<Square> ChipConnection(Square s){
+	} 
 
-public Boolean hasNetwork(int sidecolor){
-//Parameter tells us if we are checking for a white connection or black connection 
+	public Boolean hasNetwork(int sidecolor){
+	//Parameter tells us if we are checking for a white connection or black connection 
 
-//initialize a Dlist of Squares for the begining line
-DList beginingList = new DList;
-result = false; 
-this.depthCounter = 0; //Make a depthCounter field protected (non-static) 
+	//initialize a Dlist of Squares for the begining line
+	DList beginingList = new DList;
+	result = false; 
+	this.depthCounter = 0; //Make a depthCounter field protected (non-static) 
 
-if(sidecolor = white){ 
-for(j = 1; j< 7; j++){
-if board[0][j].color() = sidecolor{
-beginingList.insert(board[0][j]); 
-}else{
-continue;
-} 
-} 
-if else(sidecolor =black){ 
-for(i = 1; i< 7; j++){
-if board[i][0].color() = sidecolor{
-beginingList.insert(board[i][0]); 
-}else{
-continue;
-} 
-} 
+	if(sidecolor = white){ 
+	for(j = 1; j< 7; j++){
+	if board[0][j].color() = sidecolor{
+	beginingList.insert(board[0][j]); 
+	}else{
+	continue;
+	} 
+	} 
+	if else(sidecolor =black){ 
+	for(i = 1; i< 7; j++){
+	if board[i][0].color() = sidecolor{
+	beginingList.insert(board[i][0]); 
+	}else{
+	continue;
+	} 
+	} 
 
-if beginingList.size() ==0{
-return false; //we have no chips in the begining row 
+	if beginingList.size() ==0{
+	return false; //we have no chips in the begining row 
 
-for(square in beginingList SQ){ 
-this.depthCounter = 1;
-SQ.setVisited =true;
-if(explore(SQ,) == true){
-result = true
-return result;   
-}else{
-SQ.setVisited = false;
-continue;
-}
-} 
+	for(square in beginingList SQ){ 
+	this.depthCounter = 1;
+	SQ.setVisited =true;
+	if(explore(SQ,) == true){
+	result = true
+	return result;   
+	}else{
+	SQ.setVisited = false;
+	continue;
+	}
+	} 
 
-return result //if we reach this code it means we went through the whole for loop of begining list and found no network so it will return false 
+	return result //if we reach this code it means we went through the whole for loop of begining list and found no network so it will return false 
 
-private Boolean explore(Square s){
-this.depthCounter++;
-s.setVisited =true;
-If base case{
-return true
-}	
-else not base case{
-DLIst<Square> continueList = new chipConnection(s) 
-for( SQUARE each square in continueList){
-if explore(SQUARE) == true
-return true; 
-}else if explore(SQUARE) == false	
-depthCounter--
-SQUARE.setVisited = false; 
-continue; 
+	private Boolean explore(Square s){
+	this.depthCounter++;
+	s.setVisited =true;
+	If base case{
+	return true
+	}	
+	else not base case{
+	DLIst<Square> continueList = new chipConnection(s) 
+	for( SQUARE each square in continueList){
+	if explore(SQUARE) == true
+	return true; 
+	}else if explore(SQUARE) == false	
+	depthCounter--
+	SQUARE.setVisited = false; 
+	continue; 
 
 
-*/
+	*/
 
   	return false;
 
@@ -485,6 +748,27 @@ continue;
 
 
   }
+
+  public String toString(){
+
+    String aString;     
+    aString = "";
+    int i;
+    int j;
+
+    for (j = 0; j < 8; j++) {
+
+        for (i = 0; i < 8; i++ ) {
+        	aString = aString + "    " + board[i][j].getColor();
+        }
+
+    aString = aString + "\n\n\n";
+    }
+
+    return aString;
+  }
+
+
 
 
 
