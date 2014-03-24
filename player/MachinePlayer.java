@@ -77,8 +77,12 @@ protected Move alphaBetaPruning(boolean side, int alpha, int beta) {
   // illegal, returns false without modifying the internal state of "this"
   // player.  This method allows your opponents to inform you of their moves.
   public boolean opponentMove(Move m) {
+    if (board.isValidMove(m,this.opponentColor)) {
+      board.updateGameBoard(m,this.opponentColor);
+    } else {
     return false;
   }
+}
 
   // If the Move m is legal, records the move as a move by "this" player
   // (updates the internal game board) and returns true.  If the move is
@@ -86,7 +90,11 @@ protected Move alphaBetaPruning(boolean side, int alpha, int beta) {
   // player.  This method is used to help set up "Network problems" for your
   // player to solve.
   public boolean forceMove(Move m) {
+    if (board.isValidMove(m,this.machinePlayerColor)) {
+      board.updateGameBoard(m,this.machinePlayerColor);
+    } else {
     return false;
   }
+}
 
 }
