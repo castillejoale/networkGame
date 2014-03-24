@@ -13,6 +13,7 @@ public class GameBoard {
 
 	public Square[][] board; //CHANGE THIS TO PROTECTED, IT IS JUST FOR TESTING
 	protected MachinePlayer machinePlayer;
+	private int depthCounter;
 
 /**
 * The Gameboard class constructor creates an 8x8 Gameboard of unoccupied Squares such that each Square s.getColor() = -1.
@@ -26,6 +27,9 @@ protected GameBoard(MachinePlayer machinePlayer) {
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
 			board[i][j] = new Square(-1, i, j); // initializes board to empty
+			if (i == 7 || j == 7){ //Set the squares types of the ending lines to 1, which means ending line.
+				board[i][j].setType(1);
+			}
 		}
 	}
 	this.machinePlayer = machinePlayer;
@@ -355,6 +359,40 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 	}
 
+	protected int numberOfNonOccupiedChipConnections(Square s) {
+
+		DList list = chipConnections(s);
+
+		if (list.length() == 0) {
+			return 0;
+		} else {
+
+			
+
+			int counter= 0;
+
+			try {
+				ListNode iterator = list.front();
+
+
+
+				for (int i = 0; i < list.length(); i++){
+
+					if ( ((Square) iterator.item()).getVisited() == false){
+						counter++;
+					}
+
+				}
+
+			}catch(InvalidNodeException i){
+
+			}
+
+			return counter;
+		}
+
+	}
+
 
 	private void leftHorizontalConnection(int i, int j, int color, DList list){
 
@@ -362,7 +400,7 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		while(true) {
 
-			if (x < 1 ){
+			if (x <= 1 ){
 				break;
 			}
 
@@ -400,7 +438,7 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		while(true) {
 
-			if (x < 1 || y < 1 ){
+			if (x <= 1 || y <= 1 ){
 				break;
 			}
 
@@ -434,7 +472,7 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		while(true) {
 
-			if (y < 1){
+			if (y <= 1){
 				break;
 			}
 
@@ -469,7 +507,7 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		while(true) {
 
-			if (x > 7 || y < 1 ){
+			if (x >= 7 || y <= 1 ){
 				break;
 			}
 
@@ -503,7 +541,7 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		while(true) {
 
-			if (x > 7 ){
+			if (x >= 7 ){
 				break;
 			}
 
@@ -537,7 +575,7 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		while(true) {
 
-			if (x > 7 || y > 7 ){
+			if (x >= 7 || y >= 7 ){
 				break;
 			}
 
@@ -572,7 +610,7 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		while(true) {
 
-			if (y > 7 ){
+			if (y >= 7 ){
 				break;
 			}
 
@@ -606,7 +644,7 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		while(true) {
 
-			if (x < 1 || y > 7 ){
+			if (x <= 1 || y >= 7 ){
 				break;
 			}
 
@@ -642,112 +680,147 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 
 
-/**
-* evaluateBoard() is a helper method of alphaBetaPruning() that assigns scores to each board in the game tree search,
-* following our evaluation algorithm.
-* This method is in the Gameboard class.
-* This method calls chipConnections(), in our chip connection module, and hasValidNetwork(), in our valid network module.
-* @param the instance of our Gameboard, the depth level of our game tree search (an int)
-* @return a score for the board (a double)
-**/
-protected double evaluateBoard(GameBoard board, int depth) {
-	// Alejandro's code goes here
-	return 0;
-}
-
-/**
-*  hasValidNetwork() determines whether "this" GameBoard has a valid network
-*  for player "side".  (Does not check whether the opponent has a network.)
-*  A full description of what constitutes a valid network appears in the
-*  project "readme" file.
-*
-*  Unusual conditions:
-*    If side is neither the MachinePlayer nor the opponent,
-*          returns false.
-*    If GameBoard squares contain illegal values, the behavior of this
-*          method is undefined (i.e., don't expect any reasonable behavior).
-*
-*  @param int side -- EITHER machinePlayerColor or opponentColor
-*  @return true if player "side" has a winning network in "this" GameBoard;
-*          false otherwise.
-**/
-  protected boolean hasValidNetwork(int sidecolor) {
-  	// Alejandro's code goes here
-
-	// PSEUDOCODE MADE BY SHIR AND ALEJANDRO
-
-	/*
-
-	public DList<Square> ChipConnection(Square s){
-	} 
-
-	public Boolean hasNetwork(int sidecolor){
-	//Parameter tells us if we are checking for a white connection or black connection 
-
-	//initialize a Dlist of Squares for the begining line
-	DList beginingList = new DList;
-	result = false; 
-	this.depthCounter = 0; //Make a depthCounter field protected (non-static) 
-
-	if(sidecolor = white){ 
-	for(j = 1; j< 7; j++){
-	if board[0][j].color() = sidecolor{
-	beginingList.insert(board[0][j]); 
-	}else{
-	continue;
-	} 
-	} 
-	if else(sidecolor =black){ 
-	for(i = 1; i< 7; j++){
-	if board[i][0].color() = sidecolor{
-	beginingList.insert(board[i][0]); 
-	}else{
-	continue;
-	} 
-	} 
-
-	if beginingList.size() ==0{
-	return false; //we have no chips in the begining row 
-
-	for(square in beginingList SQ){ 
-	this.depthCounter = 1;
-	SQ.setVisited =true;
-	if(explore(SQ,) == true){
-	result = true
-	return result;   
-	}else{
-	SQ.setVisited = false;
-	continue;
+	/**
+	* evaluateBoard() is a helper method of alphaBetaPruning() that assigns scores to each board in the game tree search,
+	* following our evaluation algorithm.
+	* This method is in the Gameboard class.
+	* This method calls chipConnections(), in our chip connection module, and hasValidNetwork(), in our valid network module.
+	* @param the instance of our Gameboard, the depth level of our game tree search (an int)
+	* @return a score for the board (a double)
+	**/
+	protected double evaluateBoard(GameBoard board, int depth) {
+		// Alejandro's code goes here
+		return 0;
 	}
-	} 
 
-	return result //if we reach this code it means we went through the whole for loop of begining list and found no network so it will return false 
+	/**
+	*  hasValidNetwork() determines whether "this" GameBoard has a valid network
+	*  for player "side".  (Does not check whether the opponent has a network.)
+	*  A full description of what constitutes a valid network appears in the
+	*  project "readme" file.
+	*
+	*  Unusual conditions:
+	*    If side is neither the MachinePlayer nor the opponent,
+	*          returns false.
+	*    If GameBoard squares contain illegal values, the behavior of this
+	*          method is undefined (i.e., don't expect any reasonable behavior).
+	*
+	*  @param int side -- EITHER machinePlayerColor or opponentColor
+	*  @return true if player "side" has a winning network in "this" GameBoard;
+	*          false otherwise.
+	**/
+  	protected boolean hasValidNetwork(int sidecolor) {
+
+	  	DList beginingList = new DList();
+		this.depthCounter = 0; 
+
+		if(sidecolor == 1){  //CHECK IF IT IS WHITE
+			for(int j = 1; j < 7; j++){ //LOOK FOR A CHIP IN THE BEGINING LINE
+				if (board[0][j].getColor() == sidecolor){ //CHECK IF THE SQUARE IS WHITE
+					beginingList.insertBack(board[0][j]); //INSERT SQUARE TO THE LIST IF FOUND
+				}
+			}
+		} else if (sidecolor == 0){ //CHECK IF IT IS BLACK
+			for(int i = 1; i < 7; i++){ //LOOK FOR A CHIP IN THE BEGINING LINE
+				if (board[i][0].getColor() == sidecolor){ //CHECK IF THE SQUARE IS WHITE
+					beginingList.insertBack(board[i][0]); //INSERT SQUARE TO THE LIST IF FOUND
+				}
+			} 
+		}
+
+
+
+		if (beginingList.length() == 0){ //CHECK IF NO CHIPS WERE FOUND IN THE BEGINING LINE 
+			return false; 
+		}
+
+
+		//Create iterator that will go through the Square in the beginning line.
+		ListNode iterator = beginingList.front();
+
+		
+		//item(), and next() throw exceptions.
+		try{
+
+			for (int i = 0; i < beginingList.length(); i++) {
+
+		    	this.depthCounter = 1;
+		    	((Square) iterator.item()).setVisited(true);
+
+		    	if( explore( (Square) iterator.item()) == true) {
+
+					return true;
+
+				}else{
+
+					( (Square) iterator.item() ).setVisited(false);
+					iterator = iterator.next();
+				}
+			 
+			}
+
+
+
+		} catch (InvalidNodeException i){
+
+			return false;
+
+		}
+
+		return false;
+
+	}
 
 	private Boolean explore(Square s){
-	this.depthCounter++;
-	s.setVisited =true;
-	If base case{
-	return true
-	}	
-	else not base case{
-	DLIst<Square> continueList = new chipConnection(s) 
-	for( SQUARE each square in continueList){
-	if explore(SQUARE) == true
-	return true; 
-	}else if explore(SQUARE) == false	
-	depthCounter--
-	SQUARE.setVisited = false; 
-	continue; 
 
+		depthCounter++;
+		s.setVisited(true);
 
-	*/
-
-  	return false;
+		if (depthCounter >= 6 && s.getType() == 1){
+			return true;
+		}
 
 
 
+		DList continueList = chipConnections(s);
 
-  }
+		ListNode iterator = continueList.front();
+
+
+
+		try{
+
+			for (int i = 0; i < continueList.length(); i++) {
+
+				if ( numberOfNonOccupiedChipConnections((Square) iterator.item()) > 0 ){
+
+					explore( (Square) iterator.item());
+					
+				} else {
+					depthCounter--;
+					((Square) iterator.item()).setVisited(false);
+					iterator = iterator.next();
+					return false;
+				}
+
+
+
+			}
+
+		} catch(InvalidNodeException i) {
+
+			return false;
+
+		}
+
+
+		return false;
+
+	}
+
+
+
+
 
   public String toString(){
 
