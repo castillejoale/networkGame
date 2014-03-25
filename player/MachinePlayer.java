@@ -56,7 +56,12 @@ public class MachinePlayer extends Player {
   // Returns a new move by "this" player.  Internally records the move (updates
   // the internal game board) as a move by "this" player.
   public Move chooseMove() {
-   // calls to Shir's game tree search methods go here
+	  Move Best;
+	  
+	  board.updateGameBoard(Best,this.opponentColor);
+      if (Best.moveKind == Move.ADD){
+        	board.chipsOnBoard++;
+        }
     return new Move();
   } 
 
@@ -79,6 +84,10 @@ protected Move alphaBetaPruning(boolean side, int alpha, int beta) {
   public boolean opponentMove(Move m) {
     if (board.isValidMove(m,this.opponentColor)) {
       board.updateGameBoard(m,this.opponentColor);
+      if (m.moveKind == Move.ADD){
+        	board.chipsOnBoard++;
+        }
+      return true;
     } else {
     return false;
   }
@@ -92,6 +101,7 @@ protected Move alphaBetaPruning(boolean side, int alpha, int beta) {
   public boolean forceMove(Move m) {
     if (board.isValidMove(m,this.machinePlayerColor)) {
       board.updateGameBoard(m,this.machinePlayerColor);
+      return true;
     } else {
     return false;
   }

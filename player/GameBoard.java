@@ -14,6 +14,7 @@ public class GameBoard {
 	public Square[][] board; //CHANGE THIS TO PROTECTED, IT IS JUST FOR TESTING
 	protected MachinePlayer machinePlayer;
 	private int depthCounter;
+	protected int chipsOnBoard = 0;
 
 /**
 * The Gameboard class constructor creates an 8x8 Gameboard of unoccupied Squares such that each Square s.getColor() = -1.
@@ -27,7 +28,10 @@ protected GameBoard(MachinePlayer machinePlayer) {
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
 			board[i][j] = new Square(-1, i, j); // initializes board to empty
-			if (i == 7 || j == 7){ //Set the squares types of the ending lines to 1, which means ending line.
+			if (machinePlayer.machinePlayerColor == 0 && (i==0 || j == 0)){ //Set the squares types of the beginning lines to -1 for, which means ending line.
+				board[i][j].setType(-1);
+			}
+			if (machinePlayer.machinePlayerColor == 0 && (i==7 || j == 7)){ //Set the squares types of the ending lines to 1, which means ending line.
 				board[i][j].setType(1);
 			}
 		}
