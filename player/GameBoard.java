@@ -14,7 +14,7 @@ public class GameBoard {
 	public Square[][] board; //CHANGE THIS TO PROTECTED, IT IS JUST FOR TESTING
 	protected MachinePlayer machinePlayer;
 	private int depthCounter;
-	protected int chipsOnBoard = 0;
+	protected int chipsOnBoard;
 
 /**
 * The Gameboard class constructor creates an 8x8 Gameboard of unoccupied Squares such that each Square s.getColor() = -1.
@@ -37,6 +37,7 @@ protected GameBoard(MachinePlayer machinePlayer) {
 		}
 	}
 	this.machinePlayer = machinePlayer;
+	this.chipsOnBoard = 0;
 }
 
 /**
@@ -285,12 +286,22 @@ protected boolean formsCluster(Move m, int sidecolor) {
 		if (isValidMove(m, sidecolor)) {
 			if (m.moveKind == Move.ADD) {
 				board[m.x1][m.y1].setColor(sidecolor);
+				this.chipsOnBoard++;
 			}
 			if (m.moveKind == Move.STEP) {
 				board[m.x2][m.y2].setColor(-1);
 				board[m.x1][m.y1].setColor(sidecolor);
 			}
 		}
+	}
+
+	/**
+	* getChipsOnBoard() is a getter method that returns the number of chips on the GameBoard.  This method is dedicated to my friend Shir.
+	* @param none
+	* @return chipsOnBoard
+	**/
+	protected int getChipsOnBoard() {
+		return this.chipsOnBoard;
 	}
 
 	/**
@@ -303,10 +314,26 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		DList validMovesList = new DList();
 
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				if (isValidMove(new Move(i,j),sidecolor)) {
-					validMovesList.insertBack(new Move(i,j));
+		if (hasChipsLeft()) { // create a list of ADD moves
+			for (int i = 0; i < 8; i++) {
+				for (int j = 0; j < 8; j++) {
+					if (isValidMove(new Move(i,j),sidecolor)) {
+						validMovesList.insertBack(new Move(i,j));
+					}
+				}
+			}
+		} else { // create a list of STEP moves
+			for (int occi = 0; occi < 8; occi ++) { // occi and occj are finding the occupied squares, i and j will function as above
+				for (int occj = 0; occj < 8; occj++) {
+					if (board[occi][occj].getColor() == machinePlayer.machinePlayerColor) {
+						for (int i = 0; i < 8; i++) {
+							for (int j = 0; j < 8; j++) {
+								if (isValidMove(new Move(i,j, occi, occj),sidecolor)) {
+									validMovesList.insertBack(new Move(i,j,occi,occj));
+								}
+							}
+						}
+					}
 				}
 			}
 		}
