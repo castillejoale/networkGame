@@ -14,7 +14,6 @@ public class GameBoard {
 	public Square[][] board; //CHANGE THIS TO PROTECTED, IT IS JUST FOR TESTING
 	protected MachinePlayer machinePlayer;
 	private int depthCounter;
-	protected int chipsOnBoard;
 
 /**
 * The Gameboard class constructor creates an 8x8 Gameboard of unoccupied Squares such that each Square s.getColor() = -1.
@@ -37,7 +36,6 @@ protected GameBoard(MachinePlayer machinePlayer) {
 		}
 	}
 	this.machinePlayer = machinePlayer;
-	this.chipsOnBoard = 0;
 }
 
 /**
@@ -293,15 +291,6 @@ protected boolean formsCluster(Move m, int sidecolor) {
 				board[m.x1][m.y1].setColor(sidecolor);
 			}
 		}
-	}
-
-	/**
-	* getChipsOnBoard() is a getter method that returns the number of chips on the GameBoard.  This method is dedicated to my friend Shir.
-	* @param none
-	* @return chipsOnBoard
-	**/
-	protected int getChipsOnBoard() {
-		return this.chipsOnBoard;
 	}
 
 	/**
