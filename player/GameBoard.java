@@ -284,7 +284,6 @@ protected boolean formsCluster(Move m, int sidecolor) {
 		if (isValidMove(m, sidecolor)) {
 			if (m.moveKind == Move.ADD) {
 				board[m.x1][m.y1].setColor(sidecolor);
-				this.chipsOnBoard++;
 			}
 			if (m.moveKind == Move.STEP) {
 				board[m.x2][m.y2].setColor(-1);
