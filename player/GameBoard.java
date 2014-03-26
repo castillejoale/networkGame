@@ -27,10 +27,10 @@ protected GameBoard(MachinePlayer machinePlayer) {
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
 			board[i][j] = new Square(-1, i, j); // initializes board to empty
-			if (machinePlayer.machinePlayerColor == 0 && (i==0 || j == 0)){ //Set the squares types of the beginning lines to -1 for, which means ending line.
+			if (i==0 || j == 0){ //Set the squares types of the beginning lines to -1 for, which means ending line.
 				board[i][j].setType(-1);
 			}
-			if (machinePlayer.machinePlayerColor == 0 && (i==7 || j == 7)){ //Set the squares types of the ending lines to 1, which means ending line.
+			if (i==7 || j == 7){ //Set the squares types of the ending lines to 1, which means ending line.
 				board[i][j].setType(1);
 			}
 		}
@@ -704,10 +704,10 @@ protected boolean formsCluster(Move m, int sidecolor) {
 	* following our evaluation algorithm.
 	* This method is in the Gameboard class.
 	* This method calls chipConnections(), in our chip connection module, and hasValidNetwork(), in our valid network module.
-	* @param the instance of our Gameboard, the depth level of our game tree search (an int)
+	* @param the depth level of our game tree search (an int), the sidecolor will determine if this is a MIN (opponentPlayer) or MAX (machinePlayer) player 
 	* @return a score for the board (a double)
 	**/
-	protected double evaluateBoard(GameBoard board, int depth) {
+	protected double evaluateBoard(int depth, int sidecolor) {
 		// Alejandro's code goes here
 		return 0;
 	}
@@ -746,7 +746,13 @@ protected boolean formsCluster(Move m, int sidecolor) {
 				}
 			} 
 		}
-
+		
+		//Print- Test Code
+		try {
+			System.out.println(((Square) beginingList.front().item()).getColor());
+		} catch (InvalidNodeException e) {
+			
+		}
 
 
 		if (beginingList.length() == 0){ //CHECK IF NO CHIPS WERE FOUND IN THE BEGINING LINE 
@@ -790,7 +796,7 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 	}
 
-	private Boolean explore(Square s){
+	private boolean explore(Square s){
 
 		depthCounter++;
 		s.setVisited(true);
