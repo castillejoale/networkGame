@@ -27,7 +27,7 @@ protected GameBoard(MachinePlayer machinePlayer) {
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
 			board[i][j] = new Square(-1, i, j); // initializes board to empty
-			if (i==0 || j == 0){ //Set the squares types of the beginning lines to -1 for, which means ending line.
+			if (i==0 || j == 0){ //Set the squares types of the beginning lines to -1 for, which means begining line.
 				board[i][j].setType(-1);
 			}
 			if (i==7 || j == 7){ //Set the squares types of the ending lines to 1, which means ending line.
@@ -141,6 +141,9 @@ protected boolean isOccupied(Move m) {
 
 }
 
+
+
+
 /**
 * formsCluster(Move m) is a helper function of isValidMove()
 * Refer to the readme for project 2 to understand what a cluster is.
@@ -151,127 +154,152 @@ protected boolean isOccupied(Move m) {
 **/
 protected boolean formsCluster(Move m, int sidecolor) {
 
-	if (m.moveKind == Move.ADD) {
-		int i = m.x1;
-		int j = m.y1;
-		int surroundingchips = 1; // initialize number of surrounding chips, which includes itself (hence the 1)
+boolean returnval = false;
 
-		if (i == 0 && j!=0 && j!=7) { // west edge case
-			for (int iloop = i; iloop <= i+1; iloop++) {
-				for (int jloop = j-1; jloop <= j+1; jloop++) {
-					if (board[iloop][jloop].getColor() == sidecolor) {
-						surroundingchips++;
-					}
-				}
-			}
-		} else if (i == 7 && j!=0 && j!=7) { // east edge case
-			for (int iloop = i-1; iloop <= i; iloop++) {
-				for (int jloop = j-1; jloop <= j+1; jloop++) {
-					if (board[iloop][jloop].getColor() == sidecolor) {
-						surroundingchips++;
-					}
-				}
-			}
-		} else if (j == 0 && i!=0 && i!=7) { // north edge case
-			for (int iloop = i-1; iloop <= i+1; iloop++) {
-				for (int jloop = j; jloop <= j+1; jloop++) {
-					if (board[iloop][jloop].getColor() == sidecolor) {
-						surroundingchips++;
-					}
-				}
-			}
-		} else if (j == 7 && i!=0 && i!=7) { // south edge case
-			for (int iloop = i-1; iloop <= i+1; iloop++) {
-				for (int jloop = j-1; jloop <= j; jloop++) {
-					if (board[iloop][jloop].getColor() == sidecolor) {
-						surroundingchips++;
-					}
-				}
-			}
-		} else {
-			for (int iloop = i-1; iloop <= i+1; iloop++) {
-				for (int jloop = j-1; jloop <= j+1; jloop++) {
-					if (board[iloop][jloop].getColor() == sidecolor) {
-						surroundingchips++;
-					}
-				}
-			}
-
-		}
-		if (surroundingchips < 3) {
-			return false; // doesn't form cluster --> valid Move
-		}
-
-		System.out.println("This move would form a cluster!");
-		return true;
-
-	}
-
-
-	if (m.moveKind == Move.STEP) {
-
-		board[m.x2][m.y2].setColor(-1); // take away old move, then repeat ADD step algorithm
-
-		int i = m.x1;
-		int j = m.y1;
-		int surroundingchips = 1; // initialize number of surrounding chips, which includes itself (hence the 1)
-
-		if (i == 0 && j!=0 && j!=7) { // west edge case
-			for (int iloop = i; iloop <= i+1; iloop++) {
-				for (int jloop = j-1; jloop <= j+1; jloop++) {
-					if (board[iloop][jloop].getColor() == sidecolor) {
-						surroundingchips++;
-					}
-				}
-			}
-		} else if (i == 7 && j!=0 && j!=7) { // east edge case
-			for (int iloop = i-1; iloop <= i; iloop++) {
-				for (int jloop = j-1; jloop <= j+1; jloop++) {
-					if (board[iloop][jloop].getColor() == sidecolor) {
-						surroundingchips++;
-					}
-				}
-			}
-		} else if (j == 0 && i!=0 && i!=7) { // north edge case
-			for (int iloop = i-1; iloop <= i+1; iloop++) {
-				for (int jloop = j; jloop <= j+1; jloop++) {
-					if (board[iloop][jloop].getColor() == sidecolor) {
-						surroundingchips++;
-					}
-				}
-			}
-		} else if (j == 7 && i!=0 && i!=7) { // south edge case
-			for (int iloop = i-1; iloop <= i+1; iloop++) {
-				for (int jloop = j-1; jloop <= j; jloop++) {
-					if (board[iloop][jloop].getColor() == sidecolor) {
-						surroundingchips++;
-					}
-				}
-			}
-		} else {
-			for (int iloop = i-1; iloop <= i+1; iloop++) {
-				for (int jloop = j-1; jloop <= j+1; jloop++) {
-					if (board[iloop][jloop].getColor() == sidecolor) {
-						surroundingchips++;
-					}
-				}
-			}
-
-		}
-
-		if (surroundingchips < 3) {
-			return false; // doesn't form cluster --> valid Move
-		}
-
-		System.out.println("This move would form a cluster!");
-		return true;
-
-
-	}
-
-	System.out.println("NOT AN ADEQUATE MOVE!!");
-	return true;	
-
+if (m.moveKind == Move.ADD) {
+//System.out.println("formsCluster entered add move conditional and the move is" + m);
+board[m.x1][m.y1].setColor(sidecolor); // put move on board to see if it forms a cluster
+//System.out.println("adding the move [" + m.x1 + "," + m.y1 + "] to the gameboard");
+for (int i = 0; i < 8; i++) {
+for (int j = 0; j < 8; j++) { // loop through the whole board to find chips of color sidecolor
+if (board[i][j].getColor() == sidecolor) { 
+int surroundingchips = 0;
+//System.out.println("looking at [" + i + "," + j + "] and surroundingchips = " + surroundingchips);
+if (i==0 && j!=0 && j!=7) {
+//System.out.println("west edge cluster case add");
+for (int iloop = i; iloop <= i+1; iloop++) {
+for (int jloop = j-1; jloop <= j+1; jloop++) {
+if (board[iloop][jloop].getColor() == sidecolor) { // look at surrounding chips
+//System.out.println("looking at ["+ iloop + "," + jloop + "]");
+surroundingchips++;
+//System.out.println("surrounding chips west edge add: " + surroundingchips);
+}
+}
+}
+} else if (i==7 && j!=0 && j!=7) {
+//System.out.println("east edge cluster case add");
+for (int iloop = i-1; iloop <= i; iloop++) {
+for (int jloop = j-1; jloop <= j+1; jloop++) {
+if (board[iloop][jloop].getColor() == sidecolor) {
+//System.out.println("looking at ["+ iloop + "," + jloop + "]");
+surroundingchips++;
+//System.out.println("surrounding chips east edge add: " + surroundingchips);
+}
+}
+}
+} else if (j == 0 && i!=0 && i!=7) {
+//System.out.println("north edge cluster case add");
+for (int iloop = i-1; iloop <= i+1; iloop++) {
+for (int jloop = j; jloop <= j+1; jloop++) {
+if (board[iloop][jloop].getColor() == sidecolor) {
+//System.out.println("looking at ["+ iloop + "," + jloop + "]");
+surroundingchips++;
+//System.out.println("surrounding chips north edge add: " + surroundingchips);
+}
+}
+}
+} else if (j == 7 && i!=0 && i!=7) {
+//System.out.println("south edge cluster case add");
+for (int iloop = i-1; iloop <= i+1; iloop++) {
+for (int jloop = j-1; jloop <= j; jloop++) {
+if (board[iloop][jloop].getColor() == sidecolor) {
+//System.out.println("looking at ["+ iloop + "," + jloop + "]");
+surroundingchips++;
+//System.out.println("surrounding chips south edge add: " + surroundingchips);
+}
+}
+}
+} else {
+//System.out.println("non edge cluster case add");
+for (int iloop = i-1; iloop <= i+1; iloop++) {
+for (int jloop = j-1; jloop <= j+1; jloop++) {
+if (board[iloop][jloop].getColor() == sidecolor) {
+//System.out.println("looking at ["+ iloop + "," + jloop + "]");
+surroundingchips++;
+//System.out.println("surrounding chips non edge add: " + surroundingchips);
+}
+}
+}
+}
+if (surroundingchips == 3) {
+//System.out.println("This move would form a cluster!");
+returnval = true;
+}
+}
+}
+}
+board[m.x1][m.y1].setColor(-1); // put back board the way it came
+}
+if (m.moveKind == Move.STEP) {
+//System.out.println("formsCluster entered step move conditional");
+board[m.x2][m.y2].setColor(-1); // remove old move
+board[m.x1][m.y1].setColor(sidecolor); // place new move
+for (int i = 0; i < 8; i++) { // repeat same thing as add moves
+for (int j = 0; j < 8; j++) { // loop through the whole board to find chips of color sidecolor
+if (board[i][j].getColor() == sidecolor) { 
+int surroundingchips = 0; // then you have at least one surrounding chip (itself)
+if (i==0 && j!=0 && j!=7) {
+//System.out.println("west edge cluster case");
+for (int iloop = i; iloop <= i+1; iloop++) {
+for (int jloop = j-1; jloop <= j+1; jloop++) {
+if (board[iloop][jloop].getColor() == sidecolor) { // look at surrounding chips
+surroundingchips++;
+//System.out.println("surrounding chips: " + surroundingchips);
+}
+}
+}
+} else if (i==7 && j!=0 && j!=7) {
+//System.out.println("east edge cluster case");
+for (int iloop = i-1; iloop <= i; iloop++) {
+for (int jloop = j-1; jloop <= j+1; jloop++) {
+if (board[iloop][jloop].getColor() == sidecolor) {
+surroundingchips++;
+//System.out.println("surrounding chips: " + surroundingchips);
+}
+}
+}
+} else if (j == 0 && i!=0 && i!=7) {
+//System.out.println("north edge cluster case");
+for (int iloop = i-1; iloop <= i+1; iloop++) {
+for (int jloop = j; jloop <= j+1; jloop++) {
+if (board[iloop][jloop].getColor() == sidecolor) {
+surroundingchips++;
+//System.out.println("surrounding chips: " + surroundingchips);
+}
+}
+}
+} else if (j == 7 && i!=0 && i!=7) {
+//System.out.println("south edge cluster case");
+for (int iloop = i-1; iloop <= i+1; iloop++) {
+for (int jloop = j-1; jloop <= j; jloop++) {
+if (board[iloop][jloop].getColor() == sidecolor) {
+surroundingchips++;
+//System.out.println("surrounding chips: " + surroundingchips);
+}
+}
+}
+} else {
+//System.out.println("non edge cluster case");
+for (int iloop = i-1; iloop <= i+1; iloop++) {
+for (int jloop = j-1; jloop <= j+1; jloop++) {
+if (board[iloop][jloop].getColor() == sidecolor) {
+surroundingchips++;
+//System.out.println("surrounding chips: " + surroundingchips);
+}
+}
+}
+}
+if (surroundingchips == 3) {
+//System.out.println("This move would form a cluster!");
+returnval = true;
+}
+}
+}
+}
+board[m.x1][m.y1].setColor(-1);
+board[m.x2][m.y2].setColor(sidecolor); // put board back the way it came
+}
+return returnval;
 }
 
 	/**
@@ -350,16 +378,42 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 
 		//We call the 8 helper methods that will check the 8 different possible connections
-		leftHorizontalConnection(i, j, color, list);
-		rightHorizontalConnection(i, j, color, list);
-		bottomVerticalConnection(i, j, color, list);
 		topVerticalConnection(i, j, color, list);
-		leftTopDiagonalConnection(i, j, color, list);
 		rightTopDiagonalConnection(i, j, color, list);
+		rightHorizontalConnection(i, j, color, list);
 		rightBottomDiagonalConnection(i, j, color, list);
+		bottomVerticalConnection(i, j, color, list);
 		leftBottomDiagonalConnection(i, j, color, list);
+		leftHorizontalConnection(i, j, color, list);
+		leftTopDiagonalConnection(i, j, color, list);
+		
+		
+		
 
 		return list;
+
+	}
+
+	//Print list of connections
+	public String printChipConnections(DList d) {
+
+		try{
+
+			ListNode n = d.front();
+
+			System.out.println(d.length() + " is the length of the list, from printChipConnections");
+
+			for (int i = 0; i < d.length() ;i++){
+				System.out.println(((Square) n.item()).location()[0] + ", " + ((Square) n.item()).location()[1] + " from printChipConnections");
+				n = n.next();
+			}
+		} catch (InvalidNodeException i){
+			System.out.println("InvalidNodeException thrown in printChipConnections");
+		}
+
+		return "";
+
+
 
 	}
 
@@ -386,11 +440,10 @@ protected boolean formsCluster(Move m, int sidecolor) {
 			return 0;
 		} else {
 
-			
-
 			int counter= 0;
 
 			try {
+
 				ListNode iterator = list.front();
 
 
@@ -400,6 +453,8 @@ protected boolean formsCluster(Move m, int sidecolor) {
 					if ( ((Square) iterator.item()).getVisited() == false){
 						counter++;
 					}
+
+					iterator = iterator.next();
 
 				}
 
@@ -419,7 +474,7 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		while(true) {
 
-			if (x <= 1 ){
+			if (x < 1 ){
 				break;
 			}
 
@@ -457,7 +512,7 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		while(true) {
 
-			if (x <= 1 || y <= 1 ){
+			if (x < 1 || y < 1 ){
 				break;
 			}
 
@@ -491,12 +546,12 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		while(true) {
 
-			if (y <= 1){
+			if (y < 1){
 				break;
 			}
 
 
-			Square nextSquare = board[i][y];
+			Square nextSquare = board[i][y-1];
 
 			int nextSquareColor = nextSquare.getColor();
 
@@ -526,7 +581,7 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		while(true) {
 
-			if (x >= 7 || y <= 1 ){
+			if (x > 6 || y < 1 ){
 				break;
 			}
 
@@ -560,7 +615,7 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		while(true) {
 
-			if (x >= 7 ){
+			if (x > 6 ){
 				break;
 			}
 
@@ -585,6 +640,9 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		}
 
+
+
+
 	}
 
 	private void rightBottomDiagonalConnection(int i, int j, int color, DList list){
@@ -594,7 +652,7 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		while(true) {
 
-			if (x >= 7 || y >= 7 ){
+			if (x > 6 || y > 6 ){
 				break;
 			}
 
@@ -629,11 +687,11 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		while(true) {
 
-			if (y >= 7 ){
+			if (y > 6 ){
 				break;
 			}
 
-			Square nextSquare = board[i][y];
+			Square nextSquare = board[i][y+1];
 
 			int nextSquareColor = nextSquare.getColor();
 
@@ -663,7 +721,7 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		while(true) {
 
-			if (x <= 1 || y >= 7 ){
+			if (x < 1 || y > 6 ){
 				break;
 			}
 
@@ -708,8 +766,95 @@ protected boolean formsCluster(Move m, int sidecolor) {
 	* @return a score for the board (a double)
 	**/
 	protected double evaluateBoard(int depth, int sidecolor) {
-		// Alejandro's code goes here
-		return 0;
+
+		double score = 0.0; 
+
+
+		//If the board has a network with just 1 move (or 0 move), we assign it the highest/lowest value 
+		// possible of 1 if the MachinePlayer has a network, and -1 if the OpponentPlayer has a network
+		// the higher the depth it takes to reach the network, the worse the board score will be 
+		// a board that has a network can have an absolute score between 0.9 and 1.0 where 1.0 is the best
+		// we subtract a depthPenalizer form the best case score where the depthPenalizer is greater as the depth gets higher
+
+		double depthPenalizer = 0.0;
+
+		if(depth <=1){
+			depthPenalizer = 0.0;
+		}if(depth < 10 ){
+			depthPenalizer = depth*(0.01);
+		}else{ //if the depth is 10 or beyond, we penalize 0.1
+			depthPenalizer = 0.1; 
+		} 
+
+
+		System.out.println(this.toString());
+
+		//System.out.println("aaaaa: " + hasValidNetwork(sidecolor) + " sidecolor is: " + sidecolor);
+
+
+
+		if(hasValidNetwork(sidecolor) == true){
+			if(sidecolor == machinePlayer.machinePlayerColor){
+				score = 1.0 - depthPenalizer; 
+				return score;
+			}if(sidecolor == machinePlayer.opponentColor){
+				score = -1.0 + depthPenalizer;
+				return score;
+			}else{
+				System.out.println("Error: sidecolor for hasNetwork is not 1 or 0");
+			}
+		}
+
+		//If the board does not have a network, we evaluate it when we reach the searchdepth of the MachinePlayer 
+		//sidecolor is the color of player who currently placed the chip
+		//opponentSideColor is the color of the opponent of the player who currently placed the chip
+
+
+		int opponentSideColor =-1; 
+
+		if(sidecolor == machinePlayer.machinePlayerColor){ //if the side is true, it is the machinePlayer's turn
+			opponentSideColor = machinePlayer.opponentColor;
+		}
+		if(sidecolor == machinePlayer.opponentColor){ //if the side is false, it is the opponentPlayer's turn 
+			opponentSideColor = machinePlayer.machinePlayerColor;
+		}
+
+		int sideTotalConnections =0; //counts all of the connections on the board of the player who currently placed the chip
+		int opponentTotalConnections=0; //counts all of the connections on the board of the opponent of the player who currently placed the chip 
+
+		for (int i = 0; i < 8; i++) {
+			for (int j = 0; j < 8; j++) {
+				if(board[i][j].getColor() == sidecolor){ //if we come to a square that has a sidecolor, we find how many connections it has on the current board
+				sideTotalConnections = sideTotalConnections + ((DList) chipConnections(board[i][j])).length();
+				}if(board[i][j].getColor() == opponentSideColor){
+				opponentTotalConnections = opponentTotalConnections + ((DList) chipConnections(board[i][j])).length();
+				}else{
+				continue;
+				}
+			}
+		}
+
+		// We give a score based on the difference between the total number of connections on the board for the current player and the current player's opponent
+		//We assume that in a best case scenario, if a player has 10 chips on the board, the max 
+		//total number of connections on the board 80 ( a chip surrounded by 8 directions of connections)
+		// In the best case scenario, if the player has 80 total connections and the opponent has (worst case)
+		// 0 total connections, then we assign that board a score of (80 - 0)/100 = 0.8 to fit out -1.0 to 1.0 scale
+		//In the worst case scenario, if the player has 0 total connections and the opponent has (best case)
+		// 80 total connections, then we assign that board a score of (0-80)/100 = -0.8 Which is unfavorable.
+
+		score  = (sideTotalConnections - opponentTotalConnections)/100.0;
+
+
+
+		if(sidecolor == machinePlayer.machinePlayerColor){ //if we are evaluating the board for the MachinePlayer (MAX player), we return the score 
+			return score;
+		}
+		if(sidecolor == machinePlayer.opponentColor){ //if we are evaluating the board for the Opponent of MachinePlayer (MIN player), we negate the score  
+			return -1*score; 
+		}
+
+		return score;
+
 	}
 
 	/**
@@ -730,56 +875,66 @@ protected boolean formsCluster(Move m, int sidecolor) {
 	**/
   	protected boolean hasValidNetwork(int sidecolor) {
 
-	  	DList beginingList = new DList();
+	  	DList begList = new DList();
+	  	DList conList = new DList();
 		this.depthCounter = 0; 
 
+		
+		//Create list of possible first chips.
 		if(sidecolor == 1){  //CHECK IF IT IS WHITE
 			for(int j = 1; j < 7; j++){ //LOOK FOR A CHIP IN THE BEGINING LINE
 				if (board[0][j].getColor() == sidecolor){ //CHECK IF THE SQUARE IS WHITE
-					beginingList.insertBack(board[0][j]); //INSERT SQUARE TO THE LIST IF FOUND
+					begList.insertBack(board[0][j]); //INSERT SQUARE TO THE LIST IF FOUND
 				}
 			}
 		} else if (sidecolor == 0){ //CHECK IF IT IS BLACK
 			for(int i = 1; i < 7; i++){ //LOOK FOR A CHIP IN THE BEGINING LINE
 				if (board[i][0].getColor() == sidecolor){ //CHECK IF THE SQUARE IS WHITE
-					beginingList.insertBack(board[i][0]); //INSERT SQUARE TO THE LIST IF FOUND
+					begList.insertBack(board[i][0]); //INSERT SQUARE TO THE LIST IF FOUND
 				}
 			} 
 		}
-		
-		//Print- Test Code
-		try {
-			System.out.println(((Square) beginingList.front().item()).getColor());
-		} catch (InvalidNodeException e) {
-			
-		}
 
 
-		if (beginingList.length() == 0){ //CHECK IF NO CHIPS WERE FOUND IN THE BEGINING LINE 
+		if (begList.length() == 0){ //CHECK IF NO CHIPS WERE FOUND IN THE BEGINING LINE 
+			System.out.println("NO CHIPS WERE FOUND IN THE BEGINING LINE");
 			return false; 
 		}
 
 
+
+
+
 		//Create iterator that will go through the Square in the beginning line.
-		ListNode iterator = beginingList.front();
+		ListNode iterator = begList.front();
+
+		//Create first chip in the network connection
+		ListNode firstChip = iterator;
 
 		
 		//item(), and next() throw exceptions.
 		try{
 
-			for (int i = 0; i < beginingList.length(); i++) {
+			for (int i = 0; i < begList.length(); i++) {
+
 
 		    	this.depthCounter = 1;
-		    	((Square) iterator.item()).setVisited(true);
 
-		    	if( explore( (Square) iterator.item()) == true) {
+				System.out.println("Going through " + ((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + " in begList with depthlevel: "+ depthCounter );
 
+				conList.insertBack(firstChip.item());
+
+		    	if( explore( (Square) iterator.item(), conList) == true) {
+
+					clearVisited();
 					return true;
 
 				}else{
 
 					( (Square) iterator.item() ).setVisited(false);
 					iterator = iterator.next();
+					firstChip.remove();
+					firstChip = iterator;
 				}
 			 
 			}
@@ -788,83 +943,255 @@ protected boolean formsCluster(Move m, int sidecolor) {
 
 		} catch (InvalidNodeException i){
 
+			System.out.println("return false from InvalidNodeException in hasValidNetwork");
+
+			clearVisited();
 			return false;
 
 		}
 
+		System.out.println("No network found");
+
+		clearVisited();
 		return false;
+
+
 
 	}
 
-	private boolean explore(Square s){
+	private boolean explore(Square s, DList conList){
 
-		depthCounter++;
 		s.setVisited(true);
 
-		if (depthCounter >= 6 && s.getType() == 1){
-			return true;
-		}
+		DList list = chipConnections(s);
 
-
-
-		DList continueList = chipConnections(s);
-
-		ListNode iterator = continueList.front();
+		ListNode iterator = list.front();
 
 
 
 		try{
 
-			for (int i = 0; i < continueList.length(); i++) {
+			for (int i = 0; i < list.length(); i++) {
 
-				if ( numberOfNonOccupiedChipConnections((Square) iterator.item()) > 0 ){
+				conList.insertBack(iterator.item());
+				System.out.println("Inserting: " + ((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1]);
 
-					explore( (Square) iterator.item());
+
+
+				//Check if the chip has been visited and changes direction
+				if (!((Square) iterator.item()).getVisited()  && changeDirection(conList) ){
+
+					depthCounter++;
+
+//printChipConnections(conList);
+					System.out.println("At " + ((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + " in list with depthlevel: "+ depthCounter );
+
 					
-				} else {
-					depthCounter--;
-					((Square) iterator.item()).setVisited(false);
+
+
+					//BASE CASE OF RECURSION, WHEN WE FIND NETWORK
+					if (depthCounter >= 6 && ((Square) iterator.item()).getType() == 1){
+						System.out.println("FOUND NETWORK :-)");
+						System.out.println("The number of chips connected is: " + depthCounter);
+						printChipConnections(conList);
+						return true;
+
+					}
+
+					//If we are at an ending line chip with less that 6 connected chips
+					else if (((Square) iterator.item()).getType() == 1){
+
+						System.out.println("CHIP IN ENDING LINE WITH LESS THAN 6 CHIPS, NOT OK");
+
+						((Square) iterator.item()).setVisited(false);
+						iterator = iterator.next();
+						depthCounter--;
+						conList.removeBack();
+						continue;
+					}
+
+
+
+					//PRINT CONNECTIONS OF CURRENT CHIP
+					//printChipConnections(chipConnections((Square) iterator.item()));
+
+
+					if ( numberOfNonOccupiedChipConnections((Square) iterator.item()) > 0 ){
+
+						System.out.println(((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + "  has MORE possible connections, in explore method");
+						
+						if (explore( (Square) iterator.item(), conList)){
+							return true;
+						} else {
+							
+							depthCounter--;
+							((Square) iterator.item()).setVisited(false);
+							iterator = iterator.next();
+							conList.removeBack();
+						}
+					
+					} else {
+
+						System.out.println("DEAD END " + ((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + "  has NO more possible connections, in explore method");
+						depthCounter--;
+						((Square) iterator.item()).setVisited(false);
+						iterator = iterator.next();
+						conList.removeBack();
+						continue;
+					}
+
+
+				} else{
+
+					if (((Square) iterator.item()).getVisited()){
+						System.out.println(((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + " has been visited"); 
+					}
+
+					if (!changeDirection(conList)){
+						System.out.println(((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + " doesn't change direction"); 
+					}
+					//depthCounter--;
+					conList.removeBack();
 					iterator = iterator.next();
-					return false;
 				}
 
+			}//END OF FOR LOOP
 
-
-			}
+			return false;
 
 		} catch(InvalidNodeException i) {
+
+			System.out.println("InvalidNodeException in explore method");
 
 			return false;
 
 		}
 
 
-		return false;
 
 	}
 
 
 
 
+	private boolean changeDirection(DList d){
 
-  public String toString(){
+		System.out.println("IN CHANGE DIRECTION");
+		printChipConnections(d);
 
-    String aString;     
-    aString = "";
-    int i;
-    int j;
+		if (d.length() >= 3){
 
-    for (j = 0; j < 8; j++) {
+			try{
 
-        for (i = 0; i < 8; i++ ) {
-        	aString = aString + "    " + board[i][j].getColor();
-        }
+				ListNode n1 = d.back();
+				ListNode n2 = d.back().prev();
+				ListNode n3 = d.back().prev().prev();
 
-    aString = aString + "\n\n\n";
-    }
+				double xSlope1 = (   ((Square) n1.item()).location()[0] - ((Square) n2.item()).location()[0]   );
+				double xSlope2 = (   ((Square) n1.item()).location()[0] - ((Square) n3.item()).location()[0]   );
 
-    return aString;
-  }
+				double ySlope1 = (   ((Square) n1.item()).location()[1] - ((Square) n2.item()).location()[1]   );
+				double ySlope2 = (   ((Square) n1.item()).location()[1] - ((Square) n3.item()).location()[1]   );
+
+				double slope1;
+				double slope2;
+
+
+				if (ySlope1 == 0){
+
+					if (xSlope1 > 0){
+						slope1 = 100;
+					} else {
+						slope1 = -100;
+					}
+
+				} else{
+					slope1 =  xSlope1 / ySlope1;
+				}
+
+
+
+				if (ySlope2 == 0){
+
+					if (xSlope2 > 0){
+						slope2 = 100;
+					} else {
+						slope2 = -100;
+					}
+					
+				} else {
+
+					slope2 =   xSlope2 / ySlope2; 
+				}
+
+				System.out.println("xSlope1 is: "+ xSlope1);
+				System.out.println("xSlope2 is: "+ xSlope2);
+				System.out.println("ySlope1 is: "+ ySlope1);
+				System.out.println("ySlope2 is: "+ ySlope2);
+
+				System.out.println("Slope1 is: "+ slope1);
+				System.out.println("Slope2 is: "+ slope2);
+
+
+				
+
+				if (slope1 == slope2){
+					return false;
+				} else {
+					return true;
+				}
+
+			} catch (InvalidNodeException i){
+				System.out.println("You will never se this message, it is impossible");
+				return true;
+			}
+
+		} else {
+			return true;
+		}
+
+
+
+
+	}
+
+	private void clearVisited(){
+
+
+		for (int i = 0; i<8;i++){
+			for (int j = 0; j<8;j++){
+				board[i][j].setVisited(false);
+			}
+		}
+
+	}
+
+
+
+  	public String toString() {
+
+	    String aString;     
+	    aString = "";
+	    String strsqr = "";
+	    int i;
+	    int j;
+
+	    for (j = 0; j < 8; j++) {
+	        for (i = 0; i < 8; i++ ) {
+	        	if (board[i][j].getColor() == -1) {
+	        		strsqr = "[ ]";
+	        	} else if (board[i][j].getColor() == 0) {
+	        		strsqr = "[B]";
+	        	} else if (board[i][j].getColor() == 1) {
+	        		strsqr = "[W]";
+	        	}
+	        	aString = aString + "  " + strsqr;
+	        }
+
+	    aString = aString + "\n\n\n";
+	    }
+	    return aString;
+  	}
 
 
 

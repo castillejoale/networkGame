@@ -145,6 +145,17 @@ public class DList extends List {
     return head.prev;
   }
 
+
+  //Remove DListNode from list
+  public void removeBack() {
+
+    head.prev.prev.next = head;
+    head.prev = head.prev.prev;
+    size--;
+    
+
+  }
+
   /**
    *  toString() returns a String representation of this DList.
    *
