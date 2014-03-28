@@ -21,6 +21,18 @@ public class TestAlejandro {
     Move m5 = new Move(6,6);
     Move m6 = new Move(7,5);*/
 
+    //MOVES in board configuration 2 (Alejandro's paper)
+    /*Move m1 = new Move(0,1);
+    Move m2 = new Move(1,1);
+    Move m3 = new Move(1,3);
+    Move m4 = new Move(1,5);
+    Move m5 = new Move(3,1);
+    Move m6 = new Move(3,3);
+    Move m7 = new Move(3,6);
+    Move m8 = new Move(5,1);
+    Move m9 = new Move(7,5);
+    Move m10 = new Move(6,6);*/
+
     //MOVES in board configuration 3 (Alejandro's paper)
     /*Move m1 = new Move(0,1);
     Move m2 = new Move(1,1);
@@ -118,7 +130,7 @@ public class TestAlejandro {
     Move m6 = new Move(7,6);*/
 
     //MOVES in board configuration 14 (Alejandro's paper)
-    Move m1 = new Move(0,1);
+    /*Move m1 = new Move(0,1);
     Move m2 = new Move(1,1);
     Move m3 = new Move(1,3);
     Move m4 = new Move(1,5);
@@ -127,25 +139,28 @@ public class TestAlejandro {
     Move m7 = new Move(4,1);
     Move m8 = new Move(5,1);
     Move m9 = new Move(7,1);
-    Move m10 = new Move(7,6);
+    Move m10 = new Move(7,6);*/
+
+    //MOVES in board configuration 15 (Alejandro's paper)
+    /*Move m1 = new Move(0,1);
+    Move m2 = new Move(2,2);
+    Move m3 = new Move(0,4);
+    Move m4 = new Move(2,4);
+    Move m5 = new Move(4,2);
+    Move m6 = new Move(4,3);
+    Move m7 = new Move(7,3);*/
+
+    //MOVES in board configuration 16 (Alejandro's paper)
+    Move m1 = new Move(0,2);
+    Move m2 = new Move(0,3);
+    Move m3 = new Move(0,5);
+    Move m4 = new Move(3,1);
+    Move m5 = new Move(4,2);
+    Move m6 = new Move(4,4);
+    Move m7 = new Move(5,5);
+    Move m8 = new Move(7,1);
 
 
-
-
-
-
-    //EXTRA MOVES
-  	/*
-    Move m7 = new Move(2,6);
-    Move m8 = new Move(6,2);
-    Move m9 = new Move(6,6);
-    Move m10 = new Move(7,7);
-    Move m11 = new Move(1,5);
-    Move m12 = new Move(1,3);
-    Move m13 = new Move(3,1);
-    Move m14 = new Move(5,1);
-    Move m15 = new Move(5,3);
-    */
 
 
 
@@ -158,12 +173,10 @@ public class TestAlejandro {
   	board1.updateGameBoard(m4,1);
   	board1.updateGameBoard(m5,1);
     board1.updateGameBoard(m6,1);
-
-    
     board1.updateGameBoard(m7,1);
     board1.updateGameBoard(m8,1);
-    board1.updateGameBoard(m9,1);
-    board1.updateGameBoard(m10,1);
+    //board1.updateGameBoard(m9,1);
+    //board1.updateGameBoard(m10,1);
     /*board1.updateGameBoard(m11,1);
     board1.updateGameBoard(m12,1);
     board1.updateGameBoard(m13,1);
@@ -212,7 +225,7 @@ public class TestAlejandro {
     System.out.println(board1.hasValidNetwork(1));
 
     //Check the score of the board
-    System.out.println(board1.evaluateBoard(4,1));
+    //System.out.println(board1.evaluateBoard(4,1));
 
     
 

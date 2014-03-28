@@ -909,7 +909,7 @@ return returnval;
 		ListNode iterator = begList.front();
 
 		//Create first chip in the network connection
-		ListNode firstChip = iterator;
+
 
 		
 		//item(), and next() throw exceptions.
@@ -917,12 +917,14 @@ return returnval;
 
 			for (int i = 0; i < begList.length(); i++) {
 
+				System.out.println("Going through the " + (i + 1) + " begining chip");
+
 
 		    	this.depthCounter = 1;
 
 				System.out.println("Going through " + ((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + " in begList with depthlevel: "+ depthCounter );
 
-				conList.insertBack(firstChip.item());
+				conList.insertBack(iterator.item());
 
 		    	if( explore( (Square) iterator.item(), conList) == true) {
 
@@ -931,10 +933,12 @@ return returnval;
 
 				}else{
 
+					
+
 					( (Square) iterator.item() ).setVisited(false);
 					iterator = iterator.next();
-					firstChip.remove();
-					firstChip = iterator;
+					conList.removeBack();
+
 				}
 			 
 			}
@@ -979,7 +983,7 @@ return returnval;
 
 
 				//Check if the chip has been visited and changes direction
-				if (!((Square) iterator.item()).getVisited()  && changeDirection(conList) ){
+				if (   !((Square) iterator.item()).getVisited()  && changeDirection(conList) && (((Square) iterator.item()).getType() != -1)    ){
 
 					depthCounter++;
 
@@ -1076,8 +1080,8 @@ return returnval;
 
 	private boolean changeDirection(DList d){
 
-		System.out.println("IN CHANGE DIRECTION");
-		printChipConnections(d);
+		//System.out.println("IN CHANGE DIRECTION");
+		//printChipConnections(d);
 
 		if (d.length() >= 3){
 
@@ -1124,13 +1128,13 @@ return returnval;
 					slope2 =   xSlope2 / ySlope2; 
 				}
 
-				System.out.println("xSlope1 is: "+ xSlope1);
+				/*System.out.println("xSlope1 is: "+ xSlope1);
 				System.out.println("xSlope2 is: "+ xSlope2);
 				System.out.println("ySlope1 is: "+ ySlope1);
 				System.out.println("ySlope2 is: "+ ySlope2);
 
 				System.out.println("Slope1 is: "+ slope1);
-				System.out.println("Slope2 is: "+ slope2);
+				System.out.println("Slope2 is: "+ slope2);*/
 
 
 				
