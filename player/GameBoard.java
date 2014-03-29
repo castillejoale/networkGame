@@ -27,10 +27,10 @@ protected GameBoard(MachinePlayer machinePlayer) {
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
 			board[i][j] = new Square(-1, i, j); // initializes board to empty
-			if (i==0 || j == 0){ //Set the squares types of the beginning lines to -1 for, which means begining line.
+			if (i==0 || j == 0) { //Set the squares types of the beginning lines to -1 for, which means begining line.
 				board[i][j].setType(-1);
 			}
-			if (i==7 || j == 7){ //Set the squares types of the ending lines to 1, which means ending line.
+			if (i==7 || j == 7) { //Set the squares types of the ending lines to 1, which means ending line.
 				board[i][j].setType(1);
 			}
 		}
@@ -40,24 +40,24 @@ protected GameBoard(MachinePlayer machinePlayer) {
 
 /**
 * isValidMove(Move m) dermines whether a Move m whose color field is -1 (unoccupied) is a valid Move.
-* This method uses four helper methods: hasChipsLeft(), isInBound Move m s), isOccupied Move m s), and formsCluster Move m s).
+* This method uses four helper methods: hasChipsLeft(), isInBound(), isOccupied(), and formsCluster().
 * This method is in the Gameboard class.
-* @param Move m
+* @param Move m, int sidecolor
 * @return boolean - true if the Move m could hold a valid Move, or false otherwise
 **/
 protected boolean isValidMove(Move m, int sidecolor) {
 
   if (m.moveKind == Move.ADD) { 
-  	if (hasChipsLeft() && isInBound(m) && !isOccupied(m) && !formsCluster(m, sidecolor)) {
+  	if (hasChipsLeft(sidecolor) && isInBound(m, sidecolor) && !isOccupied(m) && !formsCluster(m, sidecolor)) {
   		return true;
   	}
   }
   if (m.moveKind == Move.STEP) {
-  	if (!hasChipsLeft() && isInBound(m) && !isOccupied(m) && !formsCluster(m, sidecolor)) {
+  	if (!hasChipsLeft(sidecolor) && isInBound(m, sidecolor) && !isOccupied(m) && !formsCluster(m, sidecolor)) {
   		return true;
   	}
   }
-  System.out.println("Move is invalid!");
+  System.out.println("Move" + m + "is invalid!");
   return false;
 
   
@@ -68,16 +68,16 @@ protected boolean isValidMove(Move m, int sidecolor) {
 * For an ADD Move to be valid, this must be true.
 * For a STEP Move to be valid, this must be false.
 * This method is in the Gameboard class.
-* @param none -- uses information from "this" Gameboard
+* @param int sidecolor -- passed in from isValidMove()
 * @return boolean - true if there are not 10 Move ms with color field equal to either 0 or 1 (black or white), false otherwise
 **/
-protected boolean hasChipsLeft() {
+protected boolean hasChipsLeft(int sidecolor) {
 
   int chips = 0; // initialize count
 
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 8; j++) {
-      if (board[i][j].getColor() == machinePlayer.machinePlayerColor) {
+      if (board[i][j].getColor() == sidecolor) {
         chips++; // counting the number of chips of the MachinePlayer's color
       }
     }
@@ -93,11 +93,11 @@ protected boolean hasChipsLeft() {
 * isInBound(Move m) is a helper function of isValidMove()
 * For a Move to be valid, this method must return true.
 * This method is in the Gameboard class.
-* @param Move m
+* @param Move m, int sidecolor -- passed in from isValidMove()
 * @return boolean - true if that Move m is within the boundaries of the Gameboard: within the 8x8 range, not on a corner,
 *                   and not on an opponent's goal area.
 **/
-protected boolean isInBound(Move m) {
+protected boolean isInBound(Move m, int sidecolor) {
 
   if (m.x1 < 0 || m.x1 > 7 || m.y1 < 0 || m.y1 > 7) {
   	System.out.println("The move is not within the 8x8 board!");
@@ -107,13 +107,13 @@ protected boolean isInBound(Move m) {
     System.out.println("A chip cannot be placed on the corners of the board!");
     return false; // no corners
   } 
-  if (machinePlayer.machinePlayerColor == 0) {
+  if (sidecolor == 0) {
     if (m.x1 == 0 || m.x1 == 7) {
       System.out.println("You cannot place a chip in your opponent's goal!");
       return false; // black cannot be in white's goal
     }  
   }
-  if (machinePlayer.machinePlayerColor == 1) {
+  if (sidecolor == 1) {
     if (m.y1 == 0 || m.y1 == 7) {
       System.out.println("You cannot place a chip in your opponent's goal!");
       return false; // white cannot be in black's goal
@@ -126,7 +126,7 @@ protected boolean isInBound(Move m) {
 * isOccupied(Move m) is a helper function of isValidMove()
 * For a Move to be valid, this method must return false.
 * This method is in the Gameboard class.
-* @param Move m
+* @param Move m -- passed in from isValidMove()
 * @return boolean - true if the color field does not equal -1 (it is occupied), false otherwise
 **/
 protected boolean isOccupied(Move m) {
@@ -157,79 +157,81 @@ protected boolean formsCluster(Move m, int sidecolor) {
 boolean returnval = false;
 
 if (m.moveKind == Move.ADD) {
-//System.out.println("formsCluster entered add move conditional and the move is" + m);
-board[m.x1][m.y1].setColor(sidecolor); // put move on board to see if it forms a cluster
-//System.out.println("adding the move [" + m.x1 + "," + m.y1 + "] to the gameboard");
-for (int i = 0; i < 8; i++) {
-for (int j = 0; j < 8; j++) { // loop through the whole board to find chips of color sidecolor
-if (board[i][j].getColor() == sidecolor) { 
-int surroundingchips = 0;
-//System.out.println("looking at [" + i + "," + j + "] and surroundingchips = " + surroundingchips);
-if (i==0 && j!=0 && j!=7) {
-//System.out.println("west edge cluster case add");
-for (int iloop = i; iloop <= i+1; iloop++) {
-for (int jloop = j-1; jloop <= j+1; jloop++) {
-if (board[iloop][jloop].getColor() == sidecolor) { // look at surrounding chips
-//System.out.println("looking at ["+ iloop + "," + jloop + "]");
-surroundingchips++;
-//System.out.println("surrounding chips west edge add: " + surroundingchips);
+	//System.out.println("formsCluster entered add move conditional and the move is" + m);
+	board[m.x1][m.y1].setColor(sidecolor); // put move on board to see if it forms a cluster
+	//System.out.println("adding the move [" + m.x1 + "," + m.y1 + "] to the gameboard");
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++) { // loop through the whole board to find chips of color sidecolor
+			if (board[i][j].getColor() == sidecolor) { 
+				int surroundingchips = 0;
+				//System.out.println("looking at [" + i + "," + j + "] and surroundingchips = " + surroundingchips);
+				if (i==0 && j!=0 && j!=7) {
+					//System.out.println("west edge cluster case add");
+					for (int iloop = i; iloop <= i+1; iloop++) {
+						for (int jloop = j-1; jloop <= j+1; jloop++) {
+							if (board[iloop][jloop].getColor() == sidecolor) { // look at surrounding chips
+								//System.out.println("looking at ["+ iloop + "," + jloop + "]");
+								surroundingchips++;
+								//System.out.println("surrounding chips west edge add: " + surroundingchips);
+							}
+						}
+					}
+				} else if (i==7 && j!=0 && j!=7) {
+					//System.out.println("east edge cluster case add");
+					for (int iloop = i-1; iloop <= i; iloop++) {
+						for (int jloop = j-1; jloop <= j+1; jloop++) {
+							if (board[iloop][jloop].getColor() == sidecolor) {
+								//System.out.println("looking at ["+ iloop + "," + jloop + "]");
+								surroundingchips++;
+								//System.out.println("surrounding chips east edge add: " + surroundingchips);
+							}
+						}
+					}
+				} else if (j == 0 && i!=0 && i!=7) {
+					//System.out.println("north edge cluster case add");
+					for (int iloop = i-1; iloop <= i+1; iloop++) {
+						for (int jloop = j; jloop <= j+1; jloop++) {
+							if (board[iloop][jloop].getColor() == sidecolor) {
+								//System.out.println("looking at ["+ iloop + "," + jloop + "]");
+								surroundingchips++;
+								//System.out.println("surrounding chips north edge add: " + surroundingchips);
+							}
+						}
+					}
+				} else if (j == 7 && i!=0 && i!=7) {
+					//System.out.println("south edge cluster case add");
+					for (int iloop = i-1; iloop <= i+1; iloop++) {
+						for (int jloop = j-1; jloop <= j; jloop++) {
+							if (board[iloop][jloop].getColor() == sidecolor) {
+								//System.out.println("looking at ["+ iloop + "," + jloop + "]");
+								surroundingchips++;
+								//System.out.println("surrounding chips south edge add: " + surroundingchips);
+							}
+						}
+					}
+				} else {
+					//System.out.println("non edge cluster case add");
+					for (int iloop = i-1; iloop <= i+1; iloop++) {
+						for (int jloop = j-1; jloop <= j+1; jloop++) {
+							if (board[iloop][jloop].getColor() == sidecolor) {
+								//System.out.println("looking at ["+ iloop + "," + jloop + "]");
+								surroundingchips++;
+								//System.out.println("surrounding chips non edge add: " + surroundingchips);
+							}
+						}
+					}
+				}
+				if (surroundingchips == 3) {
+				//System.out.println("This move would form a cluster!");
+				returnval = true;
+				}
+			}
+		}
+	}
+
+	board[m.x1][m.y1].setColor(-1); // put back board the way it came
 }
-}
-}
-} else if (i==7 && j!=0 && j!=7) {
-//System.out.println("east edge cluster case add");
-for (int iloop = i-1; iloop <= i; iloop++) {
-for (int jloop = j-1; jloop <= j+1; jloop++) {
-if (board[iloop][jloop].getColor() == sidecolor) {
-//System.out.println("looking at ["+ iloop + "," + jloop + "]");
-surroundingchips++;
-//System.out.println("surrounding chips east edge add: " + surroundingchips);
-}
-}
-}
-} else if (j == 0 && i!=0 && i!=7) {
-//System.out.println("north edge cluster case add");
-for (int iloop = i-1; iloop <= i+1; iloop++) {
-for (int jloop = j; jloop <= j+1; jloop++) {
-if (board[iloop][jloop].getColor() == sidecolor) {
-//System.out.println("looking at ["+ iloop + "," + jloop + "]");
-surroundingchips++;
-//System.out.println("surrounding chips north edge add: " + surroundingchips);
-}
-}
-}
-} else if (j == 7 && i!=0 && i!=7) {
-//System.out.println("south edge cluster case add");
-for (int iloop = i-1; iloop <= i+1; iloop++) {
-for (int jloop = j-1; jloop <= j; jloop++) {
-if (board[iloop][jloop].getColor() == sidecolor) {
-//System.out.println("looking at ["+ iloop + "," + jloop + "]");
-surroundingchips++;
-//System.out.println("surrounding chips south edge add: " + surroundingchips);
-}
-}
-}
-} else {
-//System.out.println("non edge cluster case add");
-for (int iloop = i-1; iloop <= i+1; iloop++) {
-for (int jloop = j-1; jloop <= j+1; jloop++) {
-if (board[iloop][jloop].getColor() == sidecolor) {
-//System.out.println("looking at ["+ iloop + "," + jloop + "]");
-surroundingchips++;
-//System.out.println("surrounding chips non edge add: " + surroundingchips);
-}
-}
-}
-}
-if (surroundingchips == 3) {
-//System.out.println("This move would form a cluster!");
-returnval = true;
-}
-}
-}
-}
-board[m.x1][m.y1].setColor(-1); // put back board the way it came
-}
+
 if (m.moveKind == Move.STEP) {
 //System.out.println("formsCluster entered step move conditional");
 board[m.x2][m.y2].setColor(-1); // remove old move
@@ -302,6 +304,16 @@ board[m.x2][m.y2].setColor(sidecolor); // put board back the way it came
 return returnval;
 }
 
+/**
+* helperToFormsCluster() is a helper method for formsCluster().  It takes in the same parameters, and because of the similarities in
+* implementation of formsCluster() for ADD Moves and STEP Moves, a helper method is much cleaner.
+* @param Move m, int sidecolor (either machinePlayer.machinePlayerColor or machinePlayer.opponentColor)
+* @return boolean true if the Move m would form a cluster, false otherwise.
+**/
+protected boolean helperToFormsCluster(Move m, int sidecolor) {
+	return false;
+
+}
 	/**
 	* updateGameBoard(Move m) updates the GameBoard with a new Move, as long as this Move is valid.
 	* @param Move m, int sidecolor, WHICH CAN ONLY SAY ONE OF TWO THINGS: either machinePlayer.machinePlayerColor or machinePlayer.opponentColor
@@ -330,7 +342,7 @@ return returnval;
 
 		DList validMovesList = new DList();
 
-		if (hasChipsLeft()) { // create a list of ADD moves
+		if (hasChipsLeft(sidecolor)) { // create a list of ADD moves
 			for (int i = 0; i < 8; i++) {
 				for (int j = 0; j < 8; j++) {
 					if (isValidMove(new Move(i,j),sidecolor)) {
