@@ -104,19 +104,19 @@ public class MachinePlayer extends Player {
 			previousSideColor = this.machinePlayerColor;
 		}
 		
-		//System.out.println("\nStarting a new Alpha Beta Pruning Recursion");
-		//System.out.println("The alpha is: " + alpha + "\n The beta is: " + beta);
-		//System.out.println("Sidecolor: " + sidecolor +" and " + " side" + side);
-		//System.out.println("previousSidecolor: " + previousSideColor +" and " + " previousside" + !side);
-		//System.out.println("\nWe are evaluating the following AB-Board: \n" + gb);
+		System.out.println("\nStarting a new Alpha Beta Pruning Recursion");
+		System.out.println("The alpha is: " + alpha + "\n The beta is: " + beta);
+		System.out.println("Sidecolor: " + sidecolor +" and " + " side" + side);
+		System.out.println("previousSidecolor: " + previousSideColor +" and " + " previousside" + !side);
+		System.out.println("\nWe are evaluating the following AB-Board: \n" + gb);
 		
 		
 		//Base Case 1: if the game board has a network for the other person's turn, we return the Best that contains that score. 
 		// A step move may create a network for the opponent by unblocking a connection between two enemy chips.
 		if(gb.hasValidNetwork(sidecolor)){ 
 			bestMove.setScore(gb.evaluateBoard(depthCounter, sidecolor)); //will give either -1 or 1 depending on whose side it is
-			//System.out.println("SideColor has a valid network with a board a depth: " + depthCounter + " and a eval score: "+ gb.evaluateBoard(depthCounter, sidecolor));
-			//System.out.println("\nWe are evaluating the following board to give it a eval score: \n:" + gb.toString());
+			System.out.println("SideColor has a valid network with a board a depth: " + depthCounter + " and a eval score: "+ gb.evaluateBoard(depthCounter, sidecolor));
+			System.out.println("\nWe are evaluating the following board to give it a eval score: \n:" + gb.toString());
 			return bestMove; 
 		}
 		
@@ -124,8 +124,8 @@ public class MachinePlayer extends Player {
 		//Due to the way the alphaBetaPruning method is called, we check the hasNetwork method on the previous turn's color. 
 		if(gb.hasValidNetwork(previousSideColor)){ 
 			bestMove.setScore(gb.evaluateBoard(depthCounter, previousSideColor)); //will give either -1 or 1 depending on whose side it is
-			//System.out.println("previousSideColor has a valid network with a board a depth: " + depthCounter + " and a eval score: "+ gb.evaluateBoard(depthCounter, previousSideColor));
-			//System.out.println("\nWe are evaluating the following board to give it a eval scoer: \n:" + gb.toString());
+			System.out.println("previousSideColor has a valid network with a board a depth: " + depthCounter + " and a eval score: "+ gb.evaluateBoard(depthCounter, previousSideColor));
+			System.out.println("\nWe are evaluating the following board to give it a eval scoer: \n:" + gb.toString());
 			return bestMove; 
 		}
 		
@@ -133,9 +133,9 @@ public class MachinePlayer extends Player {
 		//Base Case 3: if we reached the end of depth limit we return the Best that contains that score.
 		if(depthCounter == this.searchDepth){
 			bestMove.setScore(gb.evaluateBoard(depthCounter, previousSideColor));
-			//System.out.println("we reached the max searchDepth of: " + this.searchDepth + " and with a depthCounter (should equal searchDepth) of: " + depthCounter + " and a eval score: "+ gb.evaluateBoard(depthCounter, previousSideColor));
-			//System.out.println("\nWe are evaluating the following board to give it a eval score: \n:" + gb.toString());
-			//System.out.println("The bestMove associated with this board has the move (should be empty)"+ bestMove.getMove() + " and a score of " + bestMove.getScore());
+			System.out.println("we reached the max searchDepth of: " + this.searchDepth + " and with a depthCounter (should equal searchDepth) of: " + depthCounter + " and a eval score: "+ gb.evaluateBoard(depthCounter, previousSideColor));
+			System.out.println("\nWe are evaluating the following board to give it a eval score: \n:" + gb.toString());
+			System.out.println("The bestMove associated with this board has the move (should be empty)"+ bestMove.getMove() + " and a score of " + bestMove.getScore());
 			return bestMove; 
 		}
 		
@@ -149,7 +149,7 @@ public class MachinePlayer extends Player {
 		DList ValidMovesList = gb.allValidMoves(sidecolor); //generate a list of all the valid moves that the current side can make
 		
 		
-		//System.out.println("All valid moves for current AB-Board: " + ValidMovesList.toString());
+		System.out.println("All valid moves for current AB-Board: " + ValidMovesList.toString());
 		
 		ListNode pointer = ValidMovesList.front();
 		
@@ -157,13 +157,15 @@ public class MachinePlayer extends Player {
 		bestMove.setMove((Move) pointer.item()); //we set bestMove to be the first valid move of the list
 		
 		for(int i=0; i<ValidMovesList.length(); i++){ //for each valid move we can place on the board, we recursively call the alphaBetaPruning method
-			//System.out.println("Entering the For loop for loop number: " + i + "\nWith a parent AB-Board: \n" + gb.toString());
+			System.out.println("Entering the For loop for loop number: " + i + "\nWith a parent AB-Board: \n" + gb.toString());
 			
 			Move m = (Move) pointer.item();
 			
-			//System.out.println("We are looking at the following Move: " + m);
+			System.out.println("We are looking at the following Move: " + m);
 			
+			//Create a new gameboard with the updated move added to it
 			
+			//MachinePlayer updatedMachinePlayer = new MachinePlayer(previousSideColor);
 			
 			GameBoard updatedBoard = new GameBoard(this); 
 			for (int x = 0; x < 8; x++) {
@@ -176,8 +178,8 @@ public class MachinePlayer extends Player {
 				}
 			updatedBoard.updateGameBoard(m,sidecolor);
 			
-			//System.out.println("We just created updatedBoard and the parent board is: \n" + gb.toString());
-			//System.out.println("We insert the move," + m + "and get the following updated Board: \n" + updatedBoard.toString());
+			System.out.println("We just created updatedBoard and the parent board is: \n" + gb.toString());
+			System.out.println("We insert the move," + m + "and get the following updated Board: \n" + updatedBoard.toString());
 			
 			depthCounter++; //increment the depthCounter before we do another alphaBetaPrunning for the next recrusive call.
 			
@@ -186,19 +188,19 @@ public class MachinePlayer extends Player {
 			
 			
 			if(side == true && opponentReply.getScore() > bestMove.getScore()){
-				//System.out.println("Side = True. The Opponent Reply bestMove score: " + opponentReply.getScore() + " and the current best Move score is " + bestMove.getScore());
+				System.out.println("Side = True. The Opponent Reply bestMove score: " + opponentReply.getScore() + " and the current best Move score is " + bestMove.getScore());
 				bestMove.setMove(m); 
 				bestMove.setScore(opponentReply.getScore());
-				//System.out.println("Side = True. The alpha is: " + alpha + "\n The beta is: " + beta);
+				System.out.println("Side = True. The alpha is: " + alpha + "\n The beta is: " + beta);
 				alpha = opponentReply.getScore();
-				//System.out.println("Side = True. The alpha (should equal opponent reply score) is: " + alpha + "\n The beta (does not change) is: " + beta);
+				System.out.println("Side = True. The alpha (should equal opponent reply score) is: " + alpha + "\n The beta (does not change) is: " + beta);
 			}else if(side == false && opponentReply.getScore() < bestMove.getScore()){
-				//System.out.println("Side = False. The Opponent Reply bestMove score: " + opponentReply.getScore() + " and the current best Move score is " + bestMove.getScore());
+				System.out.println("Side = False. The Opponent Reply bestMove score: " + opponentReply.getScore() + " and the current best Move score is " + bestMove.getScore());
 				bestMove.setMove(m); 
 				bestMove.setScore(opponentReply.getScore());
-				//System.out.println("Side = False. The alpha is: " + alpha+ "\n The beta is:" + beta);
+				System.out.println("Side = False. The alpha is: " + alpha+ "\n The beta is:" + beta);
 				beta = opponentReply.getScore();
-				//System.out.println("Side = False. The alpha (Does not change) is: " + alpha + "\n The beta (should equal opponent reply score) is: " + beta);
+				System.out.println("Side = False. The alpha (Does not change) is: " + alpha + "\n The beta (should equal opponent reply score) is: " + beta);
 			}
 			
 			

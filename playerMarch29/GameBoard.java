@@ -931,12 +931,12 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 
 			for (int i = 0; i < begList.length(); i++) {
 
-				//System.out.println("Going through the " + (i + 1) + " begining chip");
+				System.out.println("Going through the " + (i + 1) + " begining chip");
 
 
 		    	this.depthCounter = 1;
 
-				//System.out.println("Going through " + ((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + " in begList with depthlevel: "+ depthCounter );
+				System.out.println("Going through " + ((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + " in begList with depthlevel: "+ depthCounter );
 
 				conList.insertBack(iterator.item());
 
@@ -992,7 +992,7 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 			for (int i = 0; i < list.length(); i++) {
 
 				conList.insertBack(iterator.item());
-				//System.out.println("Inserting: " + ((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1]);
+				System.out.println("Inserting: " + ((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1]);
 
 
 
@@ -1002,7 +1002,7 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 					depthCounter++;
 
 //printChipConnections(conList);
-					//System.out.println("At " + ((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + " in list with depthlevel: "+ depthCounter );
+					System.out.println("At " + ((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + " in list with depthlevel: "+ depthCounter );
 
 					
 
@@ -1019,7 +1019,7 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 					//If we are at an ending line chip with less that 6 connected chips
 					else if (((Square) iterator.item()).getType() == 1){
 
-						//System.out.println("CHIP IN ENDING LINE WITH LESS THAN 6 CHIPS, NOT OK");
+						System.out.println("CHIP IN ENDING LINE WITH LESS THAN 6 CHIPS, NOT OK");
 
 						((Square) iterator.item()).setVisited(false);
 						iterator = iterator.next();
@@ -1036,7 +1036,7 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 
 					if ( numberOfNonOccupiedChipConnections((Square) iterator.item()) > 0 ){
 
-						//System.out.println(((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + "  has MORE possible connections, in explore method");
+						System.out.println(((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + "  has MORE possible connections, in explore method");
 						
 						if (explore( (Square) iterator.item(), conList)){
 							return true;
@@ -1050,7 +1050,7 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 					
 					} else {
 
-						//System.out.println("DEAD END " + ((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + "  has NO more possible connections, in explore method");
+						System.out.println("DEAD END " + ((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + "  has NO more possible connections, in explore method");
 						depthCounter--;
 						((Square) iterator.item()).setVisited(false);
 						iterator = iterator.next();
@@ -1062,11 +1062,11 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 				} else{
 
 					if (((Square) iterator.item()).getVisited()){
-					//	System.out.println(((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + " has been visited"); 
+						System.out.println(((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + " has been visited"); 
 					}
 
 					if (!changeDirection(conList)){
-					//	System.out.println(((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + " doesn't change direction"); 
+						System.out.println(((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + " doesn't change direction"); 
 					}
 					//depthCounter--;
 					conList.removeBack();
