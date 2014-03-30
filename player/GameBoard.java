@@ -221,7 +221,7 @@ if (m.moveKind == Move.ADD) {
 						}
 					}
 				}
-				if (surroundingchips == 3) {
+				if (surroundingchips >= 3) {
 				System.out.println("This move would form a cluster!");
 				returnval = true;
 				}
@@ -291,7 +291,7 @@ surroundingchips++;
 }
 }
 }
-if (surroundingchips == 3) {
+if (surroundingchips >= 3) {
 //System.out.println("This move would form a cluster!");
 returnval = true;
 }
