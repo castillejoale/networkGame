@@ -279,7 +279,16 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 	}
 
 	/**
-	* allValidMoves() returns a DList of all Moves m such that isValidMove(Move m) returns true.
+	* allValidMoves(int sidecolor) returns a DList of all Moves m such that isValidMove(Move m, int sidecolor),
+	* a helper method, returns true.
+	* This method will either return a list of all ADD Moves, or all STEP Moves.
+	* isValidMove(Move m, int sidecolor) checks four things to see if a Move is valid.
+	* 1. The Move is within the bounds of the GameBoard for the given chip color.
+	* 2. The Move does not move to an occupied Square.
+	* 3. The Move does not form a cluster.
+	* 4. An ADD Move is only taken if there are less than 10 chips on the board, and
+	*    a STEP Move is only taken if there are already 10 chips on the board.
+	* Clarifications of these rules can be found in the readme.
 	* This method is in the GameBoard class.
 	* @param int sidecolor 
 	* @return a DList of all Moves m such that isValidMove(Move m) returns true.
@@ -732,16 +741,16 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 
 	}
 
-	/**
-	*  hasValidNetwork() determines whether "this" GameBoard has a valid network
-	*  for player "side". 
-	*  A full description of what constitutes a valid network appears in the
-	*  project "readme" file.
-	*
-	*  @param int side -- EITHER machinePlayerColor or opponentColor
-	*  @return true if player "side" has a winning network in "this" GameBoard;
-	*          false otherwise.
-	**/
+  /**
+  *  hasValidNetwork(int sidecolor) determines whether "this" GameBoard has a valid network
+  *  for the player with the chip color given as a parameter. 
+  *  A full description of what constitutes a valid network appears in the
+  *  project "readme" file.
+  *
+  *  @param int sidecolor (0 for black, 1 for white)
+  *  @return true if player "side" has a winning network in "this" GameBoard;
+  *          false otherwise.
+  **/
   	protected boolean hasValidNetwork(int sidecolor) {
 
 	  	DList begList = new DList();

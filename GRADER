@@ -1,13 +1,13 @@
                                      GRADER
 
-Name of student running submit:
+Name of student running submit: Alejandro Castillejo Muñoz
 Login of student running submit:
 
-Second team member's name:
-Second team member's login:
+Second team member's name: Shir Nehama
+Second team member's login: cs61b-my
 
-Third team member's name (if any):
-Third team member's login:
+Third team member's name (if any): Emily Gilden
+Third team member's login: cs61b-aiv
 
 IMPORTANT:  Once you've submitted Project 2 once, the same team member should
 submit always.  If a different teammate must submit, inform cs61b@cory.eecs of
@@ -20,25 +20,31 @@ instructor.
 ===============================================================================
 Does your program compile without errors?
 
+Yes!
 
 Have you tested your program on the 61B lab machines?
 
+*** DO THIS BEFORE WE SUBMIT so we can say yes***
 
 Did you successfully implement game tree search?  Did you successfully
 implement alpha-beta pruning?  Are there any limitations on it?  What is the
 default number of search levels set by the one-parameter MachinePlayer
 constructor (or is it a variable-depth search)?
 
+We successfully implemented the game tree search and alpha-beta pruning.  *** Shir, are there any limitations? ***  Our default search depth in the one-parameter MachinePlayer constructor is set to two.
 
 Describe your board evaluation function in some detail.
 
+*** Shir, please describe ***
 
 Does your MachinePlayer use any special method of choosing the first few moves?
 
+Our MachinePlayer chooses the best move from a list of all valid Moves.  If there is more than one best move, our MachinePlayer returns the first best Move.  There is no special method.
+*** Shir, would you mind adding anything, or looking this over? ***
 
 Is there anything else the graders should know to help them read your project?
 
-
+*** open to suggestions from you guys, but I think it's all pretty easy to read ***
 
 Describe the classes, modules, and interfaces you designed before and while you
 implemented the project.  Your description should include:
@@ -62,3 +68,41 @@ You will probably need to change some of your design decisions as you go; be
 sure to modify this file to reflect these changes before you submit your
 project.  Your design of classes and interfaces will be worth 10% of your
 grade.
+
+Classes:
+
+GameBoard.java
+
+This class hold our MachinePlayer's own copy of the game board so that it can perform a game tree search and evaluation function algorithms.  It is a two dimensional array of Squares, which store whether a square in the game board is occupied with a black or white chip, or unoccupied, and gives information about the Square to be used to find a network.  Important methods in this class are the evaluation function, which evaluates the GameBoard, allValidMoves(Move m, int sidecolor), which returns a doubly linked list of all the valid Moves on the current board, and hasValidNetwork(int sidecolor) that determines if there is a Network for a given side on the current board.
+
+Square.java
+
+This class is used exclusively by GameBoard to create a new instance of GameBoard, which is a two dimensional array of Squares.  Each GameBoard is 8x8, so there are always 64 Squares in each instance of a Gameboard.  A Square keeps record of what color chip (if any) is on it, its location, and whether it has been visited for the hasValidNetwork(int sidecolor) algorithm.
+
+MachinePlayer.java
+
+This class creates a player of the game Network that selects the best, most strategic move given the current board.  We implemented all the methods provided in the MachinePlayer template in the pj2 directory, and added one extra method, alphaBetaPruning(boolean side, double alpha, double beta, GameBoard gb, int depthCounter), that chooseMove() uses to select the best move.  alphaBetaPruning() returns an object of the class Best, which holds a Move and the score for that Move from the evaluation function.
+
+Best.java
+
+*** Shir ***
+
+Move.java
+
+This class was provided in the pj2 directory, and we did not implement or add to it, nor did we create a subclass of Move.  We utilized all of its public fields and methods to account for the differences in implementation of certain methods depending on whether a Move was an ADD move or a STEP Move, as well as theoretically add Moves to our GameBoard for tests.
+
+DList.java
+
+We used this class, which uses also uses DListNode.java and InvalidNodeException.java, to hold Moves.  We used Alejandro's homework 5 implementation.  allValidMoves(int sidecolor) returns a DList of Moves that the MachinePlayer uses to choose the best Move.  hasValidNetwork(int sidecolor) uses a helper method that also utilizes a DList to check the connections a chip has to other chips on the game board. 
+
+Modules:
+
+Validity & GameBoard - Emily Gilden
+
+Game Tree Search & Evaluation - Shir Nehama
+
+Network Finder - Alejandro Castillejo Muñoz
+
+
+
+
