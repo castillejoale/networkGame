@@ -11,23 +11,25 @@ import list.*;
 
 public class GameBoard {
 
-	public Square[][] board; //CHANGE THIS TO PROTECTED, IT IS JUST FOR TESTING
+	protected Square[][] board;
 	protected MachinePlayer machinePlayer;
-	private int depthCounter;
+	private int depthCounter; //Field that saves the number of connections made in a network
 
 /**
-* The Gameboard class constructor creates an 8x8 Gameboard of unoccupied Squares such that each Square s.getColor() = -1.
+* The Gameboard class constructor creates an 8x8 Gameboard of unoccupied Squares such that each Square s.getColor() = -1 and
+* sets the type (normal, begining goal area or end goal area)
 * This Gameboard is created at the beginning of a game in the MachinePlayer class and updated after each player makes a move. 
-* @param none
-* @return a two dimensional array of Squares
+* @param machinePlayer
+* @return nothing, it simply modifies the board field
 **/
 protected GameBoard(MachinePlayer machinePlayer) {
 
 	this.board = new Square[8][8];
+
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
 			board[i][j] = new Square(-1, i, j); // initializes board to empty
-			if (i==0 || j == 0) { //Set the squares types of the beginning lines to -1 for, which means begining line.
+			if (i==0 || j == 0) { //Set the squares types of the begining lines to -1 for, which means begining line.
 				board[i][j].setType(-1);
 			}
 			if (i==7 || j == 7) { //Set the squares types of the ending lines to 1, which means ending line.
@@ -369,10 +371,10 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 		return validMovesList;
 	}
 
-	/** chipConnections() is a helper method of evaluateBoard() that creates a DList of connections for a given occupied (single) Square
-	* with other occupied Squares.
+	/** chipConnections() is a helper method of evaluateBoard() that creates a DList of connections for a given
+	* occupied (single) Square with other occupied Squares.
 	* @param Square s, look for connections of given Square
-	* @return DList of Squares
+	* @return DList of Squares connected to the Square given by the parameter
 	**/
 	protected DList chipConnections(Square s) {
 
@@ -398,19 +400,18 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 		leftBottomDiagonalConnection(i, j, color, list);
 		leftHorizontalConnection(i, j, color, list);
 		leftTopDiagonalConnection(i, j, color, list);
-		
-		
-		
 
 		return list;
 
 	}
 
-	//Print list of connections
+	/** printChipConnections(DList d) is a helper method that prints the location of Squares of a given list.
+	* @param DList d, list of connected Squares
+	* @return String with the location of each Square
+	**/
 	public String printChipConnections(DList d) {
 
 		try{
-
 			ListNode n = d.front();
 
 			System.out.println(d.length() + " is the length of the list, from printChipConnections");
@@ -425,13 +426,12 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 
 		return "";
 
-
-
 	}
 
-
-	//Method to test is chipConnections works
-	//Returns number of connections that a chip has.
+	/** numberChipConnections(Square s) is a helper method that counts the number of connections for a given Square.
+	* @param Square s, Square in which we will check the number of connections
+	* @return int, returns number of connections that a chip has.
+	**/
 	protected int numberChipConnections(Square s) {
 
 		DList list = chipConnections(s);
@@ -444,6 +444,12 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 
 	}
 
+
+	/** numberOfNonOccupiedChipConnections(Square s) is a helper method that counts the number of connections
+	* with Squares that have not been visited.
+	* @param Square s, Square in which we will check the number of connections
+	* @return int, returns number of non-visited connections that a chip has.
+	**/
 	protected int numberOfNonOccupiedChipConnections(Square s) {
 
 		DList list = chipConnections(s);
@@ -458,335 +464,254 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 
 				ListNode iterator = list.front();
 
-
-
 				for (int i = 0; i < list.length(); i++){
-
 					if ( ((Square) iterator.item()).getVisited() == false){
 						counter++;
 					}
-
 					iterator = iterator.next();
-
 				}
 
-			}catch(InvalidNodeException i){
-
-			}
+			}catch(InvalidNodeException i){}
 
 			return counter;
 		}
 
 	}
 
-
+	/** leftHorizontalConnection(int i, int j, int color, DList list) is a helper method that looks for a connection
+	* to the left. If it find a connection it will add it to the list parameter.
+	* @param int i and int j is the location of the Square. Int color, the color of the player. DList list, list of connections
+	* @return nothing, it modifies the list
+	**/
 	private void leftHorizontalConnection(int i, int j, int color, DList list){
 
 		int x = i;
 
 		while(true) {
-
 			if (x < 1 ){
 				break;
 			}
-
-
 			Square nextSquare = board[x-1][j];
-
 			int nextSquareColor = nextSquare.getColor();
-
 			if (nextSquareColor == -1){
-
 				x--;
-
 			} else if (color == nextSquareColor){
-
 				list.insertBack(nextSquare);
 				return;
-
 			} else {
-
 				return;
-
 			}
-
-
 		}
-
-
-
 	}
 
+	/** leftTopDiagonalConnection(int i, int j, int color, DList list) is a helper method that looks for a connection
+	* to the left top diagonal. If it find a connection it will add it to the list parameter.
+	* @param int i and int j is the location of the Square. Int color, the color of the player. DList list, list of connections
+	* @return nothing, it modifies the list
+	**/
 	private void leftTopDiagonalConnection(int i, int j, int color, DList list){
 
 		int x = i;
 		int y = j;
 
 		while(true) {
-
 			if (x < 1 || y < 1 ){
 				break;
 			}
-
 			Square nextSquare = board[x-1][y-1];
-
 			int nextSquareColor = nextSquare.getColor();
-
 			if (nextSquareColor == -1){
-
 				x--;
 				y--;
-
 			} else if (color == nextSquareColor){
-
 				list.insertBack(nextSquare);
 				return;
-
 			} else {
-
 				return;
-
 			}
-
-
 		}
-
 	}
 
+
+	/** topVerticalConnection(int i, int j, int color, DList list) is a helper method that looks for a connection
+	* to the top. If it find a connection it will add it to the list parameter.
+	* @param int i and int j is the location of the Square. Int color, the color of the player. DList list, list of connections
+	* @return nothing, it modifies the list
+	**/
 	private void topVerticalConnection(int i, int j, int color, DList list){
 		int y = j;
 
 		while(true) {
-
 			if (y < 1){
 				break;
 			}
-
-
 			Square nextSquare = board[i][y-1];
-
 			int nextSquareColor = nextSquare.getColor();
-
 			if (nextSquareColor == -1){
-
 				y--;
-
 			} else if (color == nextSquareColor){
-
 				list.insertBack(nextSquare);
 				return;
-
 			} else {
-
 				return;
-
 			}
-
 		}
-
 	}
 
+	/** rightTopDiagonalConnection(int i, int j, int color, DList list) is a helper method that looks for a connection
+	* to the right top diagonal. If it find a connection it will add it to the list parameter.
+	* @param int i and int j is the location of the Square. Int color, the color of the player. DList list, list of connections
+	* @return nothing, it modifies the list
+	**/
 	private void rightTopDiagonalConnection(int i, int j, int color, DList list){
 
 		int x = i;
 		int y = j;
 
 		while(true) {
-
 			if (x > 6 || y < 1 ){
 				break;
 			}
-
 			Square nextSquare = board[x+1][y-1];
-
 			int nextSquareColor = nextSquare.getColor();
-
 			if (nextSquareColor == -1){
-
 				x++;
 				y--;
-
 			} else if (color == nextSquareColor){
-
 				list.insertBack(nextSquare);
 				return;
-
 			} else {
-
 				return;
-
 			}
-
 		}
-
 	}
 
+
+	/** rightHorizontalConnection(int i, int j, int color, DList list) is a helper method that looks for a connection
+	* to the right. If it find a connection it will add it to the list parameter.
+	* @param int i and int j is the location of the Square. Int color, the color of the player. DList list, list of connections
+	* @return nothing, it modifies the list
+	**/
 	private void rightHorizontalConnection(int i, int j, int color, DList list){
 
 		int x = i;
 
 		while(true) {
-
 			if (x > 6 ){
 				break;
 			}
-
 			Square nextSquare = board[x+1][j];
-
 			int nextSquareColor = nextSquare.getColor();
-
 			if (nextSquareColor == -1){
-
 				x++;
-
 			} else if (color == nextSquareColor){
-
 				list.insertBack(nextSquare);
 				return;
-
 			} else {
-
 				return;
-
 			}
-
 		}
-
-
-
-
 	}
 
+
+	/** rightBottomDiagonalConnection(int i, int j, int color, DList list) is a helper method that looks for a connection
+	* to the right bottom diagonal. If it find a connection it will add it to the list parameter.
+	* @param int i and int j is the location of the Square. Int color, the color of the player. DList list, list of connections
+	* @return nothing, it modifies the list
+	**/
 	private void rightBottomDiagonalConnection(int i, int j, int color, DList list){
 
 		int x = i;
 		int y = j;
 
 		while(true) {
-
 			if (x > 6 || y > 6 ){
 				break;
 			}
-
 			Square nextSquare = board[x+1][y+1];
-
 			int nextSquareColor = nextSquare.getColor();
-
 			if (nextSquareColor == -1){
-
 				x++;
 				y++;
-
 			} else if (color == nextSquareColor){
-
 				list.insertBack(nextSquare);
 				return;
-
 			} else {
-
 				return;
-
 			}
-
 		}
-
-
 	}
 
+	/** bottomVerticalConnection(int i, int j, int color, DList list) is a helper method that looks for a connection
+	* to the bottom. If it find a connection it will add it to the list parameter.
+	* @param int i and int j is the location of the Square. Int color, the color of the player. DList list, list of connections
+	* @return nothing, it modifies the list
+	**/
 	private void bottomVerticalConnection(int i, int j, int color, DList list){
 
 		int y = j;
 
 		while(true) {
-
 			if (y > 6 ){
 				break;
 			}
-
 			Square nextSquare = board[i][y+1];
-
 			int nextSquareColor = nextSquare.getColor();
-
 			if (nextSquareColor == -1){
-
 				y++;
-
 			} else if (color == nextSquareColor){
-
 				list.insertBack(nextSquare);
 				return;
-
 			} else {
-
 				return;
-
 			}
-
 		}
-
 	}
 
+	/** leftBottomDiagonalConnection(int i, int j, int color, DList list) is a helper method that looks for a connection
+	* to the left bottom diagonal. If it find a connection it will add it to the list parameter.
+	* @param int i and int j is the location of the Square. Int color, the color of the player. DList list, list of connections
+	* @return nothing, it modifies the list
+	**/
 	private void leftBottomDiagonalConnection(int i, int j, int color, DList list){
 
 		int x = i;
 		int y = j;
 
 		while(true) {
-
 			if (x < 1 || y > 6 ){
 				break;
 			}
-
 			Square nextSquare = board[x-1][y+1];
-
 			int nextSquareColor = nextSquare.getColor();
-
 			if (nextSquareColor == -1){
-
 				x--;
 				y++;
-
 			} else if (color == nextSquareColor){
-
 				list.insertBack(nextSquare);
 				return;
-
 			} else {
-
 				return;
-
 			}
-
 		}
-
 	}
 
 
-
-
-
-
-
-
-
 	/**
-	* evaluateBoard() is a helper method of alphaBetaPruning() that assigns scores to each board in the game tree search,
-	* following our evaluation algorithm.
-	* This method is in the Gameboard class.
-	* This method calls chipConnections(), in our chip connection module, and hasValidNetwork(), in our valid network module.
-	* @param the depth level of our game tree search (an int), the sidecolor will determine if this is a MIN (opponentPlayer) or MAX (machinePlayer) player 
+	* evaluateBoard() assigns scores to each board in the game tree search following our evaluation algorithm based on
+	* comparing first which player has a network and if not compare the number of total connections that each player has
+	* @param the depth level of our game tree search (an int), and the int sidecolor, the color of the player 
 	* @return a score for the board (a double)
 	**/
 	protected double evaluateBoard(int depth, int sidecolor) {
 
 		double score = 0.0; 
 
-
 		//If the board has a network with just 1 move (or 0 move), we assign it the highest/lowest value 
 		// possible of 1 if the MachinePlayer has a network, and -1 if the OpponentPlayer has a network
 		// the higher the depth it takes to reach the network, the worse the board score will be 
 		// a board that has a network can have an absolute score between 0.9 and 1.0 where 1.0 is the best
-		// we subtract a depthPenalizer form the best case score where the depthPenalizer is greater as the depth gets higher
+		// we subtract a depthPenalizer of 0.1 for each level of depth
 
 		double depthPenalizer = 0.0;
 
@@ -794,16 +719,9 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 			depthPenalizer = 0.0;
 		}if(depth < 10 ){
 			depthPenalizer = depth*(0.01);
-		}else{ //if the depth is 10 or beyond, we penalize 0.1
+		}else{ //if the depth is 10 or beyond, highly unlikely, we penalize 0.1
 			depthPenalizer = 0.1; 
 		} 
-
-
-		//System.out.println(this.toString());
-
-		//System.out.println("aaaaa: " + hasValidNetwork(sidecolor) + " sidecolor is: " + sidecolor);
-
-
 
 		if(hasValidNetwork(sidecolor) == true){
 			if(sidecolor == machinePlayer.machinePlayerColor){
@@ -820,7 +738,6 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 		//If the board does not have a network, we evaluate it when we reach the searchdepth of the MachinePlayer 
 		//sidecolor is the color of player who currently placed the chip
 		//opponentSideColor is the color of the opponent of the player who currently placed the chip
-
 
 		int opponentSideColor =-1; 
 
@@ -873,15 +790,9 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 
 	/**
 	*  hasValidNetwork() determines whether "this" GameBoard has a valid network
-	*  for player "side".  (Does not check whether the opponent has a network.)
+	*  for player "side". 
 	*  A full description of what constitutes a valid network appears in the
 	*  project "readme" file.
-	*
-	*  Unusual conditions:
-	*    If side is neither the MachinePlayer nor the opponent,
-	*          returns false.
-	*    If GameBoard squares contain illegal values, the behavior of this
-	*          method is undefined (i.e., don't expect any reasonable behavior).
 	*
 	*  @param int side -- EITHER machinePlayerColor or opponentColor
 	*  @return true if player "side" has a winning network in "this" GameBoard;
@@ -894,7 +805,7 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 		this.depthCounter = 0; 
 
 		
-		//Create list of possible first chips.
+		//Create list of possible chips in the begining line.
 		if(sidecolor == 1){  //CHECK IF IT IS WHITE
 			for(int j = 1; j < 7; j++){ //LOOK FOR A CHIP IN THE BEGINING LINE
 				if (board[0][j].getColor() == sidecolor){ //CHECK IF THE SQUARE IS WHITE
@@ -909,147 +820,92 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 			} 
 		}
 
-
 		if (begList.length() == 0){ //CHECK IF NO CHIPS WERE FOUND IN THE BEGINING LINE 
 			System.out.println("NO CHIPS WERE FOUND IN THE BEGINING LINE");
 			return false; 
 		}
 
-
-
-
-
 		//Create iterator that will go through the Square in the beginning line.
 		ListNode iterator = begList.front();
 
-		//Create first chip in the network connection
-
-
-		
 		//item(), and next() throw exceptions.
 		try{
-
 			for (int i = 0; i < begList.length(); i++) {
-
 				//System.out.println("Going through the " + (i + 1) + " begining chip");
-
-
 		    	this.depthCounter = 1;
-
 				//System.out.println("Going through " + ((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + " in begList with depthlevel: "+ depthCounter );
-
 				conList.insertBack(iterator.item());
-
 		    	if( explore( (Square) iterator.item(), conList) == true) {
-
 					clearVisited();
 					return true;
-
 				}else{
-
-					
-
 					( (Square) iterator.item() ).setVisited(false);
 					iterator = iterator.next();
 					conList.removeBack();
-
 				}
-			 
 			}
-
-
-
 		} catch (InvalidNodeException i){
-
 			System.out.println("return false from InvalidNodeException in hasValidNetwork");
-
 			clearVisited();
 			return false;
-
 		}
 
 		System.out.println("No network found");
-
 		clearVisited();
 		return false;
-
-
-
 	}
 
+
+	/**
+	* explore(Square s, DList conList) is a recursive method that looks if there is a network. 
+	* @param Square s, if this Square is in the network, and DList conList is the list of
+	* Squares in a connected network
+	* @return true if Square s will have a network, false otherwise.
+	**/
 	private boolean explore(Square s, DList conList){
 
 		s.setVisited(true);
-
 		DList list = chipConnections(s);
-
 		ListNode iterator = list.front();
 
-
-
 		try{
-
 			for (int i = 0; i < list.length(); i++) {
-
 				conList.insertBack(iterator.item());
 				//System.out.println("Inserting: " + ((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1]);
-
-
-
 				//Check if the chip has been visited and changes direction
 				if (   !((Square) iterator.item()).getVisited()  && changeDirection(conList) && (((Square) iterator.item()).getType() != -1)    ){
-
 					depthCounter++;
-
-//printChipConnections(conList);
+					//printChipConnections(conList);
 					//System.out.println("At " + ((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + " in list with depthlevel: "+ depthCounter );
-
-					
-
-
 					//BASE CASE OF RECURSION, WHEN WE FIND NETWORK
 					if (depthCounter >= 6 && ((Square) iterator.item()).getType() == 1){
 						System.out.println("FOUND NETWORK :-)");
 						System.out.println("The number of chips connected is: " + depthCounter);
 						printChipConnections(conList);
 						return true;
-
 					}
-
 					//If we are at an ending line chip with less that 6 connected chips
 					else if (((Square) iterator.item()).getType() == 1){
-
 						//System.out.println("CHIP IN ENDING LINE WITH LESS THAN 6 CHIPS, NOT OK");
-
 						((Square) iterator.item()).setVisited(false);
 						iterator = iterator.next();
 						depthCounter--;
 						conList.removeBack();
 						continue;
 					}
-
-
-
 					//PRINT CONNECTIONS OF CURRENT CHIP
 					//printChipConnections(chipConnections((Square) iterator.item()));
-
-
 					if ( numberOfNonOccupiedChipConnections((Square) iterator.item()) > 0 ){
-
-						//System.out.println(((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + "  has MORE possible connections, in explore method");
-						
+						//System.out.println(((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + "  has MORE possible connections, in explore method");	
 						if (explore( (Square) iterator.item(), conList)){
 							return true;
-						} else {
-							
+						} else {	
 							depthCounter--;
 							((Square) iterator.item()).setVisited(false);
 							iterator = iterator.next();
 							conList.removeBack();
 						}
-					
 					} else {
-
 						//System.out.println("DEAD END " + ((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + "  has NO more possible connections, in explore method");
 						depthCounter--;
 						((Square) iterator.item()).setVisited(false);
@@ -1057,124 +913,86 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 						conList.removeBack();
 						continue;
 					}
-
-
 				} else{
-
 					if (((Square) iterator.item()).getVisited()){
 					//	System.out.println(((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + " has been visited"); 
 					}
-
 					if (!changeDirection(conList)){
 					//	System.out.println(((Square) iterator.item()).location()[0] + "," + ((Square) iterator.item()).location()[1] + " doesn't change direction"); 
 					}
-					//depthCounter--;
 					conList.removeBack();
 					iterator = iterator.next();
 				}
-
 			}//END OF FOR LOOP
-
 			return false;
-
 		} catch(InvalidNodeException i) {
-
 			System.out.println("InvalidNodeException in explore method");
-
 			return false;
-
 		}
-
-
-
 	}
 
 
 
-
+	/**
+	* changeDirection(DList d) checks if a given network has changed directions.
+	* @param DList d, list of Square in a network.
+	* @return true if the new Square is changing direction, false otherwise.
+	**/
 	private boolean changeDirection(DList d){
-
 		//System.out.println("IN CHANGE DIRECTION");
 		//printChipConnections(d);
-
 		if (d.length() >= 3){
-
 			try{
-
 				ListNode n1 = d.back();
 				ListNode n2 = d.back().prev();
 				ListNode n3 = d.back().prev().prev();
-
 				double xSlope1 = (   ((Square) n1.item()).location()[0] - ((Square) n2.item()).location()[0]   );
 				double xSlope2 = (   ((Square) n1.item()).location()[0] - ((Square) n3.item()).location()[0]   );
-
 				double ySlope1 = (   ((Square) n1.item()).location()[1] - ((Square) n2.item()).location()[1]   );
 				double ySlope2 = (   ((Square) n1.item()).location()[1] - ((Square) n3.item()).location()[1]   );
-
 				double slope1;
 				double slope2;
 
-
 				if (ySlope1 == 0){
-
 					if (xSlope1 > 0){
 						slope1 = 100;
 					} else {
 						slope1 = -100;
 					}
-
 				} else{
 					slope1 =  xSlope1 / ySlope1;
 				}
-
-
-
 				if (ySlope2 == 0){
-
 					if (xSlope2 > 0){
 						slope2 = 100;
 					} else {
 						slope2 = -100;
-					}
-					
+					}	
 				} else {
-
 					slope2 =   xSlope2 / ySlope2; 
-				}
-
-				/*System.out.println("xSlope1 is: "+ xSlope1);
-				System.out.println("xSlope2 is: "+ xSlope2);
-				System.out.println("ySlope1 is: "+ ySlope1);
-				System.out.println("ySlope2 is: "+ ySlope2);
-
-				System.out.println("Slope1 is: "+ slope1);
-				System.out.println("Slope2 is: "+ slope2);*/
-
-
-				
+				}				
 
 				if (slope1 == slope2){
 					return false;
 				} else {
 					return true;
 				}
-
 			} catch (InvalidNodeException i){
 				System.out.println("You will never se this message, it is impossible");
 				return true;
 			}
-
 		} else {
 			return true;
 		}
-
-
-
-
 	}
 
-	private void clearVisited(){
 
+	/**
+	* clearVisited() is a helper method that clears the board by setting every square to unvisited.
+	* @param none
+	* @return none
+	**/
+	private void clearVisited(){
 
 		for (int i = 0; i<8;i++){
 			for (int j = 0; j<8;j++){
@@ -1185,7 +1003,11 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 	}
 
 
-
+	/**
+	* toString() is a helper method that prints "this" board.
+	* @param none
+	* @return String with an 8x8 board with each player's chips
+	**/
   	public String toString() {
 
 	    String aString;     
@@ -1210,10 +1032,6 @@ protected boolean helperToFormsCluster(Move m, int sidecolor) {
 	    }
 	    return aString;
   	}
-
-
-
-
 
 }
 
