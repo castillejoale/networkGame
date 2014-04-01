@@ -59,11 +59,13 @@ public class MachinePlayer extends Player {
   }
 
   /**
-  * chooseMove() is a helper method of chooseMove() that does a game tree search with alpha-beta pruning.
-  * This method calls alphaBetaPruning method on the top node (gameBoard) of the tree
-  * @param none
-  * @return a new valid move by "this" player.  Internally records the move (updates the internal game board) as a move by "this" player.
-  **/
+   * chooseMove() does a game tree search with alpha-beta pruning on the current Machine Player's game board.
+   * This method calls alphaBetaPruning method on the top node (gameBoard) of the tree that performs minimax.
+   * If no "best" move is found, a valid move is returned to be played. 
+   * @param none
+   * @return a new valid move by "this" player.  Internally records the move (updates the internal game board) as a move by "this" player.
+   **/
+  
   public Move chooseMove() {
 		Best bestMove = alphaBetaPruning(true, -1, 1, this.board, 0); 
 
