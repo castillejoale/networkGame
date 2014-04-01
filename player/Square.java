@@ -8,24 +8,23 @@
 **/
 
 package player;
-import list.*;
 
 public class Square {
 
 	private int color;
 	private int[] location; 
 	private boolean visited;
-	private int type = 0; // -1 Is beginning line, 0 is normal square, 1 is ending line.
+	private int type = 0; 
 
 	/** 
 	* The Square class constructor creates a Square that is referenced by the Gameboard and holds the (i,j) location of the Square within
 	* Gameboard, and the occupancy of that square.
-	* Note: We should never be using the constructor of Square.  Only GameBoard uses it.  We should only be using the getter and setter methods.
-	* Another note: board[i][j] references a Square.  After a Move has been played, we need to have a line like the following:
-	* board[i][j].setColor(color);
+	* The color field for a square has the following values:  
 	* -1 = unoccupied
 	* 0 = black
 	* 1 = white
+	* A newly initialized square has visited field set to false. When a game board creates the squares, the type fielld of the square is 
+	* set depending on the location of where this game board is on the board.
 	**/
 	protected Square(int color, int i, int j) {
 		if (color < -1 || color > 1) {
@@ -65,23 +64,45 @@ public class Square {
 		}
 
 	}
-
+	
+	/**
+	 * location() will return the location of the Square on the game board
+	 * @return an int array with the location of the Square on the game board
+	 */
 	protected int[] location() {
 		return location;
 	}
 
+	/**
+	 * getVisited() will get whether the square has been visited. This is used in the hasNetwork() method
+	 * @return a boolean false (if not visited) or true (if visited)
+	 */
 	protected boolean getVisited() {
 		return visited;
 	}
 
+	/**
+	 * setVisited() sets whether the Square has been visited or not
+	 * @param b is a boolean where b=true means the square is visited and b=false, otherwise.
+	 */
 	protected void setVisited(boolean b) {
 		this.visited = b;
 	}
-
+	/**
+	 * getType() returns the square type. 
+	 * The type values are: -1 if the square is in the beginning line, 0 if it is a normal square,
+	 *  1 if it is in an ending line.
+	 * @return an int -1, 0, or 1.
+	 */
 	protected int getType() {
 		return type;
 	}
 
+	/**
+	 * setType() will set the square's type when the square is first initialized for the game board
+	 * @param i is an int -1 if the square is in the beginning line, 0 if it is a normal square,
+	 *  1 if it is in an ending line.
+	 */
 	protected void setType(int i) {
 		this.type = i;
 	}
