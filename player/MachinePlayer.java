@@ -12,7 +12,7 @@ public class MachinePlayer extends Player {
   protected int machinePlayerColor;
   protected int opponentColor;
   protected int searchDepth;
-  protected GameBoard board; // please refer to any GameBoard in MachinePlayer.java as "board".  if there is discrepancy, either change your own code, or consult the group
+  protected GameBoard board; 
 
   /**
    * MachinePlayer(int color, int searchDepth) creates a machine player with a given color 
@@ -60,20 +60,18 @@ public class MachinePlayer extends Player {
 
   /**
   * chooseMove() is a helper method of chooseMove() that does a game tree search with alpha-beta pruning.
-  * This method is in the MachinePlayer class.
   * This method calls alphaBetaPruning method on the top node (gameBoard) of the tree
   * @param none
-  * @return a new move by "this" player.  Internally records the move (updates the internal game board) as a move by "this" player.
+  * @return a new valid move by "this" player.  Internally records the move (updates the internal game board) as a move by "this" player.
   **/
   public Move chooseMove() {
 		Best bestMove = alphaBetaPruning(true, -1, 1, this.board, 0); 
 
 	    if (board.isValidMove(bestMove.getMove(),this.machinePlayerColor)) {
-	    	board.updateGameBoard(bestMove.getMove(),this.machinePlayerColor); //update the gameboard with the chooseMove() 
+	    	board.updateGameBoard(bestMove.getMove(),this.machinePlayerColor);  
 			return bestMove.getMove();
 		}else{
 			System.out.print("alphabetapruning - chooseMove() returned an invalid move");
-			System.exit(0);
 			return bestMove.getMove();
 			
 		}
@@ -82,9 +80,9 @@ public class MachinePlayer extends Player {
 	  
 /**
 * alphaBetaPruning() is a helper method of chooseMove() that does a game tree search with alpha-beta pruning.
-* This method is in the MachinePlayer class.
-* This method calls evaluateBoard, in our board evaluation module.
-* @param side, which is true if player is MachinePlayer, opponent otherwise, and the alpha and beta values for alpha-beta pruning, we also take gb the Gameboard we are branching and depthCounter is the depth of the node in the tree
+* @param side, which is true if the player who will place the move is MachinePlayer, opponent otherwise. 
+* @param The alpha and beta values for alpha-beta pruning
+* @param gb is the game board we are visiting and depthCounter is the depth of this game board node from the root
 * @return the Best with the best Move and its evaluation score.
 **/
   protected Best alphaBetaPruning(boolean side, double alpha, double beta, GameBoard gb, int depthCounter){
@@ -93,39 +91,30 @@ public class MachinePlayer extends Player {
 		
 		
 		
-		int sidecolor =-1; //correspond the correct sidecolor and side boolean 
-		int previousSideColor = -1; //correspond the previous turn with the color opposite of the current turn
-		if(side == true){ //if the side is true, it is the machinePlayer's turn
-			sidecolor = this.machinePlayerColor;
+		int sideColor =-1; 
+		int previousSideColor = -1; 
+		if(side == true){ 
+			sideColor = this.machinePlayerColor;
 			previousSideColor = this.opponentColor;
 		}
-		if(side ==false){ //if the side is false, it is the opponentPlayer's turn 
-			sidecolor = this.opponentColor;
+		if(side ==false){ 
+			sideColor = this.opponentColor;
 			previousSideColor = this.machinePlayerColor;
 		}
 		
-		//System.out.println("\nStarting a new Alpha Beta Pruning Recursion");
-		//System.out.println("The alpha is: " + alpha + "\n The beta is: " + beta);
-		//System.out.println("Sidecolor: " + sidecolor +" and " + " side" + side);
-		//System.out.println("previousSidecolor: " + previousSideColor +" and " + " previousside" + !side);
-		//System.out.println("\nWe are evaluating the following AB-Board: \n" + gb);
 		
 		
 		//Base Case 1: if the game board has a network for the other person's turn, we return the Best that contains that score. 
 		// A step move may create a network for the opponent by unblocking a connection between two enemy chips.
-		if(gb.hasValidNetwork(sidecolor)){ 
-			bestMove.setScore(gb.evaluateBoard(depthCounter, sidecolor)); //will give either -1 or 1 depending on whose side it is
-			//System.out.println("SideColor has a valid network with a board a depth: " + depthCounter + " and a eval score: "+ gb.evaluateBoard(depthCounter, sidecolor));
-			//System.out.println("\nWe are evaluating the following board to give it a eval score: \n:" + gb.toString());
+		if(gb.hasValidNetwork(sideColor)){ 
+			bestMove.setScore(gb.evaluateBoard(depthCounter, sideColor)); 
 			return bestMove; 
 		}
 		
 		//Base Case 2: if the game board has a network, we return the Best that contains that score. 
 		//Due to the way the alphaBetaPruning method is called, we check the hasNetwork method on the previous turn's color. 
 		if(gb.hasValidNetwork(previousSideColor)){ 
-			bestMove.setScore(gb.evaluateBoard(depthCounter, previousSideColor)); //will give either -1 or 1 depending on whose side it is
-			//System.out.println("previousSideColor has a valid network with a board a depth: " + depthCounter + " and a eval score: "+ gb.evaluateBoard(depthCounter, previousSideColor));
-			//System.out.println("\nWe are evaluating the following board to give it a eval scoer: \n:" + gb.toString());
+			bestMove.setScore(gb.evaluateBoard(depthCounter, previousSideColor)); 
 			return bestMove; 
 		}
 		
@@ -133,9 +122,6 @@ public class MachinePlayer extends Player {
 		//Base Case 3: if we reached the end of depth limit we return the Best that contains that score.
 		if(depthCounter == this.searchDepth){
 			bestMove.setScore(gb.evaluateBoard(depthCounter, previousSideColor));
-			//System.out.println("we reached the max searchDepth of: " + this.searchDepth + " and with a depthCounter (should equal searchDepth) of: " + depthCounter + " and a eval score: "+ gb.evaluateBoard(depthCounter, previousSideColor));
-			//System.out.println("\nWe are evaluating the following board to give it a eval score: \n:" + gb.toString());
-			//System.out.println("The bestMove associated with this board has the move (should be empty)"+ bestMove.getMove() + " and a score of " + bestMove.getScore());
 			return bestMove; 
 		}
 		
@@ -146,24 +132,14 @@ public class MachinePlayer extends Player {
 			bestMove.setScore(beta);
 		}
 		
-		DList ValidMovesList = gb.allValidMoves(sidecolor); //generate a list of all the valid moves that the current side can make
-		
-		
-		//System.out.println("All valid moves for current AB-Board: " + ValidMovesList.toString());
-		
+		DList ValidMovesList = gb.allValidMoves(sideColor); //generate a list of all the valid moves that the current side player can make
 		ListNode pointer = ValidMovesList.front();
 		
 		try{
 		bestMove.setMove((Move) pointer.item()); //we set bestMove to be the first valid move of the list
 		
-		for(int i=0; i<ValidMovesList.length(); i++){ //for each valid move we can place on the board, we recursively call the alphaBetaPruning method
-			//System.out.println("Entering the For loop for loop number: " + i + "\nWith a parent AB-Board: \n" + gb.toString());
-			
+		for(int i=0; i<ValidMovesList.length(); i++){ 
 			Move m = (Move) pointer.item();
-			
-			//System.out.println("We are looking at the following Move: " + m);
-			
-			
 			
 			GameBoard updatedBoard = new GameBoard(this); 
 			for (int x = 0; x < 8; x++) {
@@ -174,34 +150,21 @@ public class MachinePlayer extends Player {
 					
 					}
 				}
-			updatedBoard.updateGameBoard(m,sidecolor);
+			updatedBoard.updateGameBoard(m,sideColor); //Create a new child game board with the selected valid move 
 			
-			//System.out.println("We just created updatedBoard and the parent board is: \n" + gb.toString());
-			//System.out.println("We insert the move," + m + "and get the following updated Board: \n" + updatedBoard.toString());
 			
 			depthCounter++; //increment the depthCounter before we do another alphaBetaPrunning for the next recrusive call.
-			
 			opponentReply = alphaBetaPruning(!side, alpha, beta, updatedBoard, depthCounter);
 			
-			
-			
 			if(side == true && opponentReply.getScore() > bestMove.getScore()){
-				//System.out.println("Side = True. The Opponent Reply bestMove score: " + opponentReply.getScore() + " and the current best Move score is " + bestMove.getScore());
 				bestMove.setMove(m); 
 				bestMove.setScore(opponentReply.getScore());
-				//System.out.println("Side = True. The alpha is: " + alpha + "\n The beta is: " + beta);
 				alpha = opponentReply.getScore();
-				//System.out.println("Side = True. The alpha (should equal opponent reply score) is: " + alpha + "\n The beta (does not change) is: " + beta);
 			}else if(side == false && opponentReply.getScore() < bestMove.getScore()){
-				//System.out.println("Side = False. The Opponent Reply bestMove score: " + opponentReply.getScore() + " and the current best Move score is " + bestMove.getScore());
 				bestMove.setMove(m); 
 				bestMove.setScore(opponentReply.getScore());
-				//System.out.println("Side = False. The alpha is: " + alpha+ "\n The beta is:" + beta);
 				beta = opponentReply.getScore();
-				//System.out.println("Side = False. The alpha (Does not change) is: " + alpha + "\n The beta (should equal opponent reply score) is: " + beta);
 			}
-			
-			
 			
 			if(alpha >= beta){
 				return bestMove;
@@ -209,9 +172,9 @@ public class MachinePlayer extends Player {
 			depthCounter--; //when we move to next branch, we need to un-increment our depthCounter
 			pointer = pointer.next();
 		}
-		}catch(InvalidNodeException e){
-			
+		}catch(InvalidNodeException e){	
 		}
+		
 		return bestMove;
 	}
 
