@@ -17,15 +17,15 @@ public class Square {
 	private int type = 0; 
 
 	/** 
-	* The Square class constructor creates a Square that is referenced by the Gameboard and holds the (i,j) location of the Square within
-	* Gameboard, and the occupancy of that square.
-	* The color field for a square has the following values:  
-	* -1 = unoccupied
-	* 0 = black
-	* 1 = white
-	* A newly initialized square has visited field set to false. When a game board creates the squares, the type fielld of the square is 
-	* set depending on the location of where this game board is on the board.
-	**/
+	 * The Square class constructor creates a Square that is referenced by the Gameboard and holds the (i,j) location of the Square within
+	 * Gameboard, and the occupancy of that square.
+	 * Note: We should never be using the constructor of Square. Only GameBoard uses it. We should only be using the getter and setter methods.
+	 * Another note: board[i][j] references a Square. After a Move has been played, we need to have a line like the following:
+	 * board[i][j].setColor(color);
+	 * -1 = unoccupied
+	 * 0 = black
+	 * 1 = white
+	 **/
 	protected Square(int color, int i, int j) {
 		if (color < -1 || color > 1) {
 			return;

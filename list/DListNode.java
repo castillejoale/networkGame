@@ -13,8 +13,6 @@ public class DListNode extends ListNode {
    *  (inherited)  myList references the List that contains this node.
    *  prev references the previous node in the DList.
    *  next references the next node in the DList.
-   *
-   *  DO NOT CHANGE THE FOLLOWING FIELD DECLARATIONS.
    **/
 
   protected DListNode prev;
@@ -59,7 +57,7 @@ public class DListNode extends ListNode {
    */
   public ListNode next() throws InvalidNodeException {
     if (!isValidNode()) {
-      throw new InvalidNodeException("next() called on invalid node");
+      throw new InvalidNodeException();
     }
     return next;
   }
@@ -75,7 +73,7 @@ public class DListNode extends ListNode {
    */
   public ListNode prev() throws InvalidNodeException {
     if (!isValidNode()) {
-      throw new InvalidNodeException("prev() called on invalid node");
+      throw new InvalidNodeException();
     }
     return prev;
   }
@@ -91,15 +89,9 @@ public class DListNode extends ListNode {
    */
   public void insertAfter(Object item) throws InvalidNodeException {
     if (!isValidNode()) {
-      throw new InvalidNodeException("insertAfter() called on invalid node");
+      throw new InvalidNodeException();
     }
-    // Your solution here.  Will look something like your Homework 4 solution,
-    //   but changes are necessary.  For instance, there is no need to check if
-    //   "this" is null.  Remember that this node's "myList" field tells you
-    //   what DList it's in.  You should use myList.newNode() to create the
-    //   new node.
 
-    //MIO
 
     DListNode newNode = new DListNode(item, (DList) this.myList, this, this.next);
     this.next.prev = newNode;
@@ -121,15 +113,9 @@ public class DListNode extends ListNode {
    */
   public void insertBefore(Object item) throws InvalidNodeException {
     if (!isValidNode()) {
-      throw new InvalidNodeException("insertBefore() called on invalid node");
+      throw new InvalidNodeException();
     }
-    // Your solution here.  Will look something like your Homework 4 solution,
-    //   but changes are necessary.  For instance, there is no need to check if
-    //   "this" is null.  Remember that this node's "myList" field tells you
-    //   what DList it's in.  You should use myList.newNode() to create the
-    //   new node.
 
-    //MIO
 
     DListNode newNode = new DListNode(item, (DList) this.myList, this.prev, this);
     this.prev.next = newNode;
@@ -149,14 +135,9 @@ public class DListNode extends ListNode {
    */
   public void remove() throws InvalidNodeException {
     if (!isValidNode()) {
-      throw new InvalidNodeException("remove() called on invalid node");
+      throw new InvalidNodeException();
     }
-    // Your solution here.  Will look something like your Homework 4 solution,
-    //   but changes are necessary.  For instance, there is no need to check if
-    //   "this" is null.  Remember that this node's "myList" field tells you
-    //   what DList it's in.
 
-    //MIO
 
     this.prev.next = this.next;
     this.next.prev = this.prev;
@@ -164,9 +145,7 @@ public class DListNode extends ListNode {
 
 
 
-    // Make this node an invalid node, so it cannot be used to corrupt myList.
     myList = null;
-    // Set other references to null to improve garbage collection.
     next = null;
     prev = null;
   }

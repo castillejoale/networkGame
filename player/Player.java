@@ -1,7 +1,6 @@
 /* Player.java */
 
 package player;
-import list.*;
 
 /**
  *  A class that is extended by all Network players (human and machine).

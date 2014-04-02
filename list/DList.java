@@ -2,40 +2,14 @@
 
 package list;
 
-/**
- *  A DList is a mutable doubly-linked list ADT.  Its implementation is
- *  circularly-linked and employs a sentinel node at the head of the list.
- *
- *  DO NOT CHANGE ANY METHOD PROTOTYPES IN THIS FILE.
- **/
-
 public class DList extends List {
 
   /**
    *  (inherited)  size is the number of items in the list.
    *  head references the sentinel node.
-   *  Note that the sentinel node does not store an item, and is not included
-   *  in the count stored by the "size" field.
-   *
-   *  DO NOT CHANGE THE FOLLOWING FIELD DECLARATION.
    **/
 
   protected DListNode head;
-
-  /* DList invariants:
-   *  1)  head != null.
-   *  2)  For every DListNode x in a DList, x.next != null.
-   *  3)  For every DListNode x in a DList, x.prev != null.
-   *  4)  For every DListNode x in a DList, if x.next == y, then y.prev == x.
-   *  5)  For every DListNode x in a DList, if x.prev == y, then y.next == x.
-   *  6)  For every DList l, l.head.myList = null.  (Note that l.head is the
-   *      sentinel.)
-   *  7)  For every DListNode x in a DList l EXCEPT l.head (the sentinel),
-   *      x.myList = l.
-   *  8)  size is the number of DListNodes, NOT COUNTING the sentinel,
-   *      that can be accessed from the sentinel (head) by a sequence of
-   *      "next" references.
-   **/
 
   /**
    *  newNode() calls the DListNode constructor.  Use this method to allocate
@@ -57,14 +31,8 @@ public class DList extends List {
    *  DList() constructs for an empty DList.
    **/
   public DList() {
-    // Your solution here.  Similar to Homework 4, but now you need to specify
-    //   the `list' field (second parameter) as well.
-
-    //MIO
 
     head = newNode(Integer.MIN_VALUE, null, null, null);
-    
-    //head.myList = this;
     head.next = head;
     head.prev = head;
     
@@ -79,10 +47,6 @@ public class DList extends List {
    *  Performance:  runs in O(1) time.
    **/
   public void insertFront(Object item) {
-    // Your solution here.  Similar to Homework 4, but now you need to specify
-    //   the `list' field (second parameter) as well.
-
-    //MIO
 
     DListNode node = newNode(item, this, head, head.next);
     head.next.prev = node;
@@ -101,10 +65,6 @@ public class DList extends List {
    *  Performance:  runs in O(1) time.
    **/
   public void insertBack(Object item) {
-    // Your solution here.  Similar to Homework 4, but now you need to specify
-    //   the `list' field (second parameter) as well.
-
-    //MIO
 
     DListNode node = newNode(item, this, head.prev, head);
     head.prev.next = node;
@@ -120,8 +80,6 @@ public class DList extends List {
    *  empty, return an "invalid" node--a node with the property that any
    *  attempt to use it will cause an exception.  (The sentinel is "invalid".)
    *
-   *  DO NOT CHANGE THIS METHOD.
-   *
    *  @return a ListNode at the front of this DList.
    *
    *  Performance:  runs in O(1) time.
@@ -135,8 +93,6 @@ public class DList extends List {
    *  empty, return an "invalid" node--a node with the property that any
    *  attempt to use it will cause an exception.  (The sentinel is "invalid".)
    *
-   *  DO NOT CHANGE THIS METHOD.
-   *
    *  @return a ListNode at the back of this DList.
    *
    *  Performance:  runs in O(1) time.
@@ -146,8 +102,14 @@ public class DList extends List {
   }
 
 
-  //Remove DListNode from list
-  public void removeBack() {
+  /**
+   *  removeBack() removes the last node of a DList if valid
+   */
+  public void removeBack() throws InvalidNodeException {
+
+    if (!(head.prev.isValidNode())) {
+      throw new InvalidNodeException();
+    }
 
     head.prev.prev.next = head;
     head.prev = head.prev.prev;
@@ -158,8 +120,6 @@ public class DList extends List {
 
   /**
    *  toString() returns a String representation of this DList.
-   *
-   *  DO NOT CHANGE THIS METHOD.
    *
    *  @return a String representation of this DList.
    *
@@ -173,71 +133,6 @@ public class DList extends List {
       current = current.next;
     }
     return result + "]";
-  }
-
-  private static void testInvalidNode(ListNode p) {
-    System.out.println("p.isValidNode() should be false: " + p.isValidNode());
-    try {
-      p.item();
-      System.out.println("p.item() should throw an exception, but didn't.");
-    } catch (InvalidNodeException lbe) {
-      System.out.println("p.item() should throw an exception, and did.");
-    }
-    try {
-      p.setItem(new Integer(0));
-      System.out.println("p.setItem() should throw an exception, but didn't.");
-    } catch (InvalidNodeException lbe) {
-      System.out.println("p.setItem() should throw an exception, and did.");
-    }
-    try {
-      p.next();
-      System.out.println("p.next() should throw an exception, but didn't.");
-    } catch (InvalidNodeException lbe) {
-      System.out.println("p.next() should throw an exception, and did.");
-    }
-    try {
-      p.prev();
-      System.out.println("p.prev() should throw an exception, but didn't.");
-    } catch (InvalidNodeException lbe) {
-      System.out.println("p.prev() should throw an exception, and did.");
-    }
-    try {
-      p.insertBefore(new Integer(1));
-      System.out.println("p.insertBefore() should throw an exception, but " +
-                         "didn't.");
-    } catch (InvalidNodeException lbe) {
-      System.out.println("p.insertBefore() should throw an exception, and did."
-                         );
-    }
-    try {
-      p.insertAfter(new Integer(1));
-      System.out.println("p.insertAfter() should throw an exception, but " +
-                         "didn't.");
-    } catch (InvalidNodeException lbe) {
-      System.out.println("p.insertAfter() should throw an exception, and did."
-                         );
-    }
-    try {
-      p.remove();
-      System.out.println("p.remove() should throw an exception, but didn't.");
-    } catch (InvalidNodeException lbe) {
-      System.out.println("p.remove() should throw an exception, and did.");
-    }
-  }
-
-  private static void testEmpty() {
-    List l = new DList();
-    System.out.println("An empty list should be [  ]: " + l);
-    System.out.println("l.isEmpty() should be true: " + l.isEmpty());
-    System.out.println("l.length() should be 0: " + l.length());
-    System.out.println("Finding front node p of l.");
-    ListNode p = l.front();
-    testInvalidNode(p);
-    System.out.println("Finding back node p of l.");
-    p = l.back();
-    testInvalidNode(p);
-    l.insertFront(new Integer(10));
-    System.out.println("l after insertFront(10) should be [  10  ]: " + l);
   }
 
 

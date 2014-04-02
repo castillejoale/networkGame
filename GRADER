@@ -1,7 +1,7 @@
-                                     GRADER
+GRADER
 
-Name of student running submit: Alejandro Castillejo MuÃ±oz
-Login of student running submit:
+Name of student running submit: Alejandro Castillejo Muñoz
+Login of student running submit: cs61b-ayy
 
 Second team member's name: Shir Nehama
 Second team member's login: cs61b-my
@@ -18,33 +18,46 @@ If you've submitted your project once, or even written a substantial amount of
 code together, you may not change partners without the permission of the
 instructor.
 ===============================================================================
-Does your program compile without errors?
-
+1. Does your program compile without errors?
 Yes!
 
-Have you tested your program on the 61B lab machines?
+2.Have you tested your program on the 61B lab machines?
+Yes!
 
-*** DO THIS BEFORE WE SUBMIT so we can say yes***
-
-Did you successfully implement game tree search?  Did you successfully
+3.Did you successfully implement game tree search?  Did you successfully
 implement alpha-beta pruning?  Are there any limitations on it?  What is the
 default number of search levels set by the one-parameter MachinePlayer
 constructor (or is it a variable-depth search)?
 
-We successfully implemented the game tree search and alpha-beta pruning.  *** Shir, are there any limitations? ***  Our default search depth in the one-parameter MachinePlayer constructor is set to two.
+We successfully implemented the game tree search and alpha-beta pruning. 
+There are no limitations to the alpha-beta pruning. 
+Our default search depth in the one-parameter MachinePlayer constructor is set to two.
 
-Describe your board evaluation function in some detail.
+4. Describe your board evaluation function in some detail.
 
-*** Shir, please describe ***
+Our game boards will be given a (double type) score between -1.0 and 1.0. Since the Machine Player is a max player through the alpha beta pruning implementation, he will choose the board score that is most positive. The opponent, a min player, will choose the board with a score that is most negative. 
 
-Does your MachinePlayer use any special method of choosing the first few moves?
+To assign a board a score, we first check if there is a network on the board. If a board gets a network with 1 move, then it will get a score
+of 1 (for Machine Player) or -1 (for opponent player). For every move that needs to be made to reach that network, we penalize the 
+score by 0.01 so it is less attractive to the player. Any network that is reached with more than 10 moves will get a penalized score of 0.1
+Therefore, a board with a network will have an absolute score between 0.9 and 1.0. 
 
-Our MachinePlayer chooses the best move from a list of all valid Moves.  If there is more than one best move, our MachinePlayer returns the first best Move.  There is no special method.
-*** Shir, would you mind adding anything, or looking this over? ***
+If the board does not have a network, We give a score based on the difference between the total number of connections on the 
+board for the current player and the current player's opponent. We note that an upper bound limit (that is impossible) for the 
+total number of connections on the board for a player is 0 and the lower bound limit is 0. Therefore, the maximum difference 
+between the total number of connections on the board of the current and opponent player is 80-0 = 80 and the minimum difference
+is 0-80 = -80. To fit our scale of -1.0 and 1.0, we assign a board a score of
+[(# connections on the board for the current player) - (# connections for opponent player)] / 100.0.
 
-Is there anything else the graders should know to help them read your project?
 
-*** open to suggestions from you guys, but I think it's all pretty easy to read ***
+5. Does your MachinePlayer use any special method of choosing the first few moves?
+
+Our MachinePlayer chooses the best move from a list of all valid Moves.  
+If there is more than one best move, our MachinePlayer returns the first best Move. 
+
+
+6. Is there anything else the graders should know to help them read your project?
+No
 
 Describe the classes, modules, and interfaces you designed before and while you
 implemented the project.  Your description should include:
@@ -71,38 +84,142 @@ grade.
 
 Classes:
 
-GameBoard.java
+1. GameBoard.java
 
-This class hold our MachinePlayer's own copy of the game board so that it can perform a game tree search and evaluation function algorithms.  It is a two dimensional array of Squares, which store whether a square in the game board is occupied with a black or white chip, or unoccupied, and gives information about the Square to be used to find a network.  Important methods in this class are the evaluation function, which evaluates the GameBoard, allValidMoves(Move m, int sidecolor), which returns a doubly linked list of all the valid Moves on the current board, and hasValidNetwork(int sidecolor) that determines if there is a Network for a given side on the current board.
+This class holds our MachinePlayer's own copy of the game board so that it can perform a game tree search and evaluation function algorithms.  It is a two dimensional array of Squares, which store whether a square in the game board is occupied with a black or white chip, or unoccupied, and gives information about the Square to be used to find a network. Important methods in this class are the evaluation function, which evaluates the GameBoard, allValidMoves(Move m, int sidecolor), which returns a doubly linked list of all the valid Moves on the current board, and hasValidNetwork(int sidecolor) that determines if there is a Network for a given side on the current board.
 
-Square.java
+2. Square.java
 
-This class is used exclusively by GameBoard to create a new instance of GameBoard, which is a two dimensional array of Squares.  Each GameBoard is 8x8, so there are always 64 Squares in each instance of a Gameboard.  A Square keeps record of what color chip (if any) is on it, its location, and whether it has been visited for the hasValidNetwork(int sidecolor) algorithm.
+This class is used exclusively by GameBoard to create a new instance of GameBoard, which is a two dimensional array of Squares. Each GameBoard is 8x8, so there are always 64 Squares in each instance of a GameBoard. A Square keeps record of what color chip (if any) is on it, its location, and whether it has been visited for the 
+hasValidNetwork(int sidecolor) algorithm. A Square keeps track of whether it is a square in the beginning or end lines of a board or if it in the middle of the board.
 
-MachinePlayer.java
+3. MachinePlayer.java
 
-This class creates a player of the game Network that selects the best, most strategic move given the current board.  We implemented all the methods provided in the MachinePlayer template in the pj2 directory, and added one extra method, alphaBetaPruning(boolean side, double alpha, double beta, GameBoard gb, int depthCounter), that chooseMove() uses to select the best move.  alphaBetaPruning() returns an object of the class Best, which holds a Move and the score for that Move from the evaluation function.
+This class creates a player of the game Network that selects the best, most strategic move given the current board. 
+We implemented all the methods provided in the MachinePlayer template in the pj2 directory, and added one extra method, alphaBetaPruning(boolean side, double alpha, double beta, GameBoard gb, int depthCounter), that chooseMove() uses to select the best move using mini-max and alpha-beta pruning. alphaBetaPruning() returns an object of the class Best, which holds a Move and the score for that Move from the evaluation function. The chooseMove() and opponentMove() methods will update the internal game board stored in the MachinePlayer once the best move is found (when chooseMove() is called) or when a move is passed to the opponentPlayer. 
 
-Best.java
+4. Best.java
 
-*** Shir ***
+The Best class is a helper class we use when implementing the mini max algorithm. Whenever we need to evaluate a move that is made on a given game board, we store the move and the score (assigned by the evaluation function) in a new Best class. The Best class only contains two fields: Move and Score and only consists of getter and setter methods. 
 
-Move.java
+5. Move.java
 
-This class was provided in the pj2 directory, and we did not implement or add to it, nor did we create a subclass of Move.  We utilized all of its public fields and methods to account for the differences in implementation of certain methods depending on whether a Move was an ADD move or a STEP Move, as well as theoretically add Moves to our GameBoard for tests.
+This class was provided in the pj2 directory, and we did not implement or add to it, nor did we create a subclass of Move. We utilized all of its public fields and methods to account for the differences in implementation of certain methods depending
+on whether a Move was an ADD move or a STEP Move, as well as theoretically add Moves to our GameBoard for tests.
 
-DList.java
+6. DList.java and DListNode.java
 
-We used this class, which uses also uses DListNode.java and InvalidNodeException.java, to hold Moves.  We used Alejandro's homework 5 implementation.  allValidMoves(int sidecolor) returns a DList of Moves that the MachinePlayer uses to choose the best Move.  hasValidNetwork(int sidecolor) uses a helper method that also utilizes a DList to check the connections a chip has to other chips on the game board. 
+We used this class, which uses also uses DListNode.java and InvalidNodeException.java, to hold Moves.We used Alejandro's homework 5 implementation. The DList is a subclass of the List class and the DListNode is a subclass of the ListNode class. The allValidMoves(int sidecolor) method, implemented in the GameBoard class returns a DList of Moves that the MachinePlayer uses to choose the best Move.  hasValidNetwork(int sidecolor) uses a helper method
+that also utilizes a DList to check the connections a chip has to other chips on the game board. 
 
 Modules:
 
-Validity & GameBoard - Emily Gilden
+1. Validity & GameBoard
+  implemented in: GameBoard.java
+  implemented by: Emily Gilden 
+  implementation:
+  /**
+  * allValidMoves(int sidecolor) returns a DList of all Moves m such that isValidMove(Move m, int sidecolor),
+  * a helper method, returns true.
+  * This method will either return a list of all ADD Moves, or all STEP Moves.
+  * isValidMove(Move m, int sidecolor) checks four things to see if a Move is valid.
+  * 1. The Move is within the bounds of the GameBoard for the given chip color.
+  * 2. The Move does not move to an occupied Square.
+  * 3. The Move does not form a cluster.
+  * 4. An ADD Move is only taken if there are less than 10 chips on the board, and
+  *    a STEP Move is only taken if there are already 10 chips on the board.
+  * Clarifications of these rules can be found in the readme.
+  * This method is in the GameBoard class.
+  * @param int sidecolor 
+  * @return a DList of all Moves m such that isValidMove(Move m) returns true.
+  **/
+  protected DList allValidMoves(int sidecolor)
 
-Game Tree Search & Evaluation - Shir Nehama
 
-Network Finder - Alejandro Castillejo MuÃ±oz
+/**
+* The GameBoard class constructor creates an 8x8 GameBoard of unoccupied Squares such that each Square s.getColor() = -1 and
+* sets the type (normal, beginning goal area or end goal area).
+* This GameBoard is created at the beginning of a game in the MachinePlayer class and updated after each player makes a move. 
+* @param machinePlayer
+* @return nothing, it simply modifies the board field
+**/
+protected GameBoard(MachinePlayer machinePlayer)
+
+2. Evaluation Function
+  implemented in: GameBoard.java
+  implemented by: Shir Nehama
+  implementation: 
+
+/**
+* evaluateBoard() assigns scores to each board in the game tree search following our evaluation algorithm based on
+* comparing first which player has a network and if not compare the number of total connections that each player has
+* @param the depth level of our game tree search (an int), and the int sidecolor, the color of the player who placed the chip. 
+* @return a score for the board (a double) between -1.0 and 1.0
+**/
+protected double evaluateBoard(int depth, int sidecolor) {
 
 
+3. Game Tree Search
+  implemented in: MachinePlayer.java
+  implemented by: Shir Nehama	
+  implementation:
+  
+  /**
+  * chooseMove() does a game tree search with alpha-beta pruning on the current Machine Player's game board.
+  * This method calls alphaBetaPruning method on the top node (gameBoard) of the tree that performs minimax.
+  * If no "best" move is found, a valid move is returned to be played. 
+  * @param none
+  * @return a new valid move by "this" player.  Internally records the move (updates the internal game board) as a move by "this" player.
+  **/
+  public Move chooseMove()
+
+  /**
+  * alphaBetaPruning() is a helper method of chooseMove() that does a game tree search with alpha-beta pruning.
+  * @param side, which is true if the player who will place the move is MachinePlayer, opponent otherwise. 
+  * @param The alpha and beta values for alpha-beta pruning
+  * @param gb is the game board we are visiting and depthCounter is the depth of this game                    board node from the root
+  * @return the Best with the best Move and its evaluation score.
+  **/
+protected Best alphaBetaPruning(boolean side, double alpha, double beta, GameBoard gb, int depthCounter)
 
 
+4. Network Finder
+  implemented in: GameBoard.java
+  implemented by: Alejandro Castillejo Muñoz
+  implementation:
+  /**
+  *  hasValidNetwork(int sidecolor) determines whether "this" GameBoard has a valid network
+  *  for the player with the chip color given as a parameter. 
+  *  A full description of what constitutes a valid network appears in the
+  *  project "readme" file.
+  *
+  *  @param int sidecolor (0 for black, 1 for white)
+  *  @return true if player "side" has a winning network in "this" GameBoard;
+  *          false otherwise.
+  **/
+  protected boolean hasValidNetwork(int sidecolor)
+    
+
+5. Lists
+  implemented in: GameBoard.java, MachinePlayer.java
+  implemented by: Alejandro Castillejo Muñoz, Shir Nehama, Emily Gilden
+  implementation:
+
+  /**
+   *  DList() constructs for an empty DList.
+   **/
+  public DList()
+
+/**
+   *  insertBack() inserts an item at the back of this DList.
+   *
+   *  @param item is the item to be inserted.
+   *
+   *  Performance:  runs in O(1) time.
+   **/
+  public void insertBack(Object item)
+
+/**removeBack() removes DListNode from list
+  *
+  **/
+  public void removeBack()

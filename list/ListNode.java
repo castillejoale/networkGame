@@ -2,19 +2,12 @@
 
 package list;
 
-/**
- *  A ListNode is a mutable node in a list.  No implementation is provided.
- *
- *  DO NOT CHANGE THIS FILE.
- **/
 
 public abstract class ListNode {
 
   /**
    *  item references the item stored in the current node.
    *  myList references the List that contains this node.
-   *
-   *  DO NOT CHANGE THE FOLLOWING FIELD DECLARATIONS.
    */
 
   protected Object item;

@@ -2,12 +2,6 @@
 
 package list;
 
-/**
- *  A List is a mutable list ADT.  No implementation is provided.
- *
- *  DO NOT CHANGE THIS FILE.
- **/
-
 public abstract class List {
 
   /**

@@ -27,7 +27,6 @@ public class MachinePlayer extends Player {
     } else if (color == 1) {
       this.opponentColor = 0;
     } else {
-      System.out.println("Color must be either zero or one!");
     }
 
     searchDepth = 2;
@@ -49,7 +48,6 @@ public class MachinePlayer extends Player {
     } else if (color == 1) {
       this.opponentColor = 0;
     } else {
-      System.out.println("Color must be either zero or one!");
     }
 
     this.searchDepth = searchDepth;
@@ -73,7 +71,6 @@ public class MachinePlayer extends Player {
 	    	board.updateGameBoard(bestMove.getMove(),this.machinePlayerColor);  
 			return bestMove.getMove();
 		}else{
-			System.out.print("alphabetapruning - chooseMove() returned an invalid move");
 			return bestMove.getMove();
 			
 		}
@@ -87,7 +84,7 @@ public class MachinePlayer extends Player {
 * @param gb is the game board we are visiting and depthCounter is the depth of this game board node from the root
 * @return the Best with the best Move and its evaluation score.
 **/
-  protected Best alphaBetaPruning(boolean side, double alpha, double beta, GameBoard gb, int depthCounter){
+  private Best alphaBetaPruning(boolean side, double alpha, double beta, GameBoard gb, int depthCounter){
 		Best bestMove = new Best(); //this is the move we will return 
 		Best opponentReply; //this is the move the Opponent will reply with
 		
