@@ -65,7 +65,11 @@ public class MachinePlayer extends Player {
    **/
   
   public Move chooseMove() {
-		Best bestMove = alphaBetaPruning(true, -1, 1, this.board, 0); 
+		if(!this.board.hasChipsLeft(machinePlayerColor)){
+			this.searchDepth = 1;
+		}
+	  
+	  	Best bestMove = alphaBetaPruning(true, -1, 1, this.board, 0); 
 
 	    if (board.isValidMove(bestMove.getMove(),this.machinePlayerColor)) {
 	    	board.updateGameBoard(bestMove.getMove(),this.machinePlayerColor);  
@@ -119,7 +123,8 @@ public class MachinePlayer extends Player {
 		
 		
 		//Base Case 3: if we reached the end of depth limit we return the Best that contains that score.
-		if(depthCounter == this.searchDepth){
+
+		if(depthCounter == searchDepth){
 			bestMove.setScore(gb.evaluateBoard(depthCounter, previousSideColor));
 			return bestMove; 
 		}

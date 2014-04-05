@@ -72,7 +72,7 @@ public class GameBoard {
 	* @param int sideColor -- passed in from isValidMove()
 	* @return boolean - true if there are not 10 Squares with color field equal to either 0 or 1 (black or white), false otherwise
 	**/
-	private boolean hasChipsLeft(int sideColor) {
+	protected boolean hasChipsLeft(int sideColor) {
 
 	  int chips = 0; // initialize count
 
